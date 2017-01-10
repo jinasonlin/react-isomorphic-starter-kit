@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { serverStaticRender } from '../render';
-import NotFoundPage from '../../../client/modules/error/notfound';
+import NotFoundPage from 'modules/error/notfound';
 
 export default function (app) {
   app.get('(/404|/500)', function (...args) {

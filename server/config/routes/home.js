@@ -1,5 +1,5 @@
 import { serverRouteRender, pageRender } from '../render';
-import routes from '../../../client/modules/home/route';
+import routes from 'modules/home/route';
 
 export default function (app) {
   app.get('/home', (...args) => {

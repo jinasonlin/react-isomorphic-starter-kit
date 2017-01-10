@@ -3,13 +3,13 @@ import { createMemoryHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { pageRender, serverRouteRender } from '../render';
 // redux
-import routes from '../../../client/modules/redux/route';
-import reducers from '../../../client/modules/redux/reducers';
-import { increment } from '../../../client/modules/redux/actions'
+import routes from 'modules/redux/route';
+import reducers from 'modules/redux/reducers';
+import { increment } from 'modules/redux/actions'
 // redux plus
-import { configureStore } from '../../../client/modules/reduxPlus/redux/store'
-import  * as plusRoutes from '../../../client/modules/reduxPlus/route';
-import { decrement } from '../../../client/modules/reduxPlus/redux/actions'
+import { configureStore } from 'modules/reduxPlus/redux/store'
+import  * as plusRoutes from 'modules/reduxPlus/route';
+import { decrement } from 'modules/reduxPlus/redux/actions'
 
 export default function (app) {
   app.get('(/redux|/redux/*)', (req, ...args) => {

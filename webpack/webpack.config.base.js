@@ -47,6 +47,10 @@ var config = {
     ]
   },
   resolve: {
+    modulesDirectories: [
+      'client',
+      'node_modules',
+    ],
     extensions: ['', '.js', '.jsx', '.scss']
   },
   plugins: [

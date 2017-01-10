@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
-import API from '../../../config';
+import API from 'config';
 
 class Home extends Component{
   componentDidMount() {

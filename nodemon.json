@@ -1,0 +1,12 @@
+{
+  "verbose": true,
+  "delay": "2500",
+  "watch": [
+    "client/",
+    "server/"
+  ],
+  "ignore": [
+    "client/**/*.scss"
+  ],
+  "ext": "js jsx"
+}

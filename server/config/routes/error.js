@@ -4,7 +4,7 @@ import { serverStaticRender } from '../render';
 import NotFoundPage from '../../../client/modules/error/notfound';
 
 export default function (app) {
-  app.get('/404|500', function (...args) {
+  app.get('(/404|/500)', function (...args) {
     serverStaticRender({
       page: 'error',
       component: renderToString(<NotFoundPage />)

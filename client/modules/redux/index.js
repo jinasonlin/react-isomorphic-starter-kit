@@ -4,13 +4,13 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { browserHistory, Router } from 'react-router';
 import routes from './route';
-import todoApp from './reducers'
+import reducers from './reducers'
 
 let initState;
 if (window.__data) {
   initState = window.__data;
 }
-let store = createStore(todoApp, initState)
+let store = createStore(reducers, initState)
 
 let rootElement = document.getElementById('app')
 render(

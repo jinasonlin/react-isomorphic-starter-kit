@@ -45,10 +45,10 @@ function counter(state = 0, action) {
   }
 }
 
-const todoApp = combineReducers({
+const reducers = combineReducers({
   visibilityFilter,
   todos,
   counter
 })
 
-export default todoApp
+export default reducers

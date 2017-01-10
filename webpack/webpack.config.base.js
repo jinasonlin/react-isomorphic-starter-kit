@@ -17,6 +17,9 @@ var config = {
     'redux': [
       './client/modules/redux/index.js'
     ],
+    'reduxPlus': [
+      './client/modules/reduxPlus/index.js'
+    ],
     'error': [
       './client/modules/error/index.js'
     ]

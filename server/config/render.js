@@ -65,7 +65,7 @@ function pageRender({ page, data }, req, res) {
   });
 }
 
-function serverRouteRender({ page, store, routes, data }, req, res) {
+function serverRouteRender({ page, store, history, routes, data }, req, res) {
   if (__ALLOW_ISOMORPHIC_PROXY__) {
     return pageRender({ page, data }, req, res);
   }
@@ -76,7 +76,7 @@ function serverRouteRender({ page, store, routes, data }, req, res) {
   }
 
   let html = '';
-  match({ routes, location: req.url }, (err, redirect, props) => {
+  match({ history, routes, location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message);
     } else if (redirect) {

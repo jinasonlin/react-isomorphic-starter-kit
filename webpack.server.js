@@ -34,9 +34,13 @@ app.get('*', function (req, res, next) {
   if (rootPath === 'favicon.ico') {
     return next();
   }
-  // default root path
+  // 默认路径
   if (!rootPath) {
     rootPath = 'index';
+  }
+  // 限制路径名字长度，同时过滤类似hashid.hot-update.json等请求
+  if (rootPath.length > 20) {
+    return next();
   }
   res.sendFile(path.join(__dirname, 'client/views', rootPath + '.html'));
 });

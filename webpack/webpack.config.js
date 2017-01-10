@@ -48,6 +48,7 @@ config.plugins.push(
       NODE_ENV: JSON.stringify('production')
     },
     __DEVELOPMENT__: false,
+    __DEVTOOLS__: false,
     __DEBUG__: false
   })
 );

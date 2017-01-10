@@ -53,6 +53,7 @@ config.module.loaders.push({
 config.plugins.push(
   new webpack.DefinePlugin({
     __DEVELOPMENT__: true,
+    __DEVTOOLS__: true,
     __DEBUG__: true
   })
 );

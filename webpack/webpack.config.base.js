@@ -11,9 +11,6 @@ var config = {
     'index': [
       './client/modules/home/index.js'
     ],
-    'm': [
-      './client/modules/m/index.js'
-    ],
     'redux': [
       './client/modules/redux/index.js'
     ],

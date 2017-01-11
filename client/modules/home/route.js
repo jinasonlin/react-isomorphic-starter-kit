@@ -6,7 +6,7 @@ const rootRoute = {
   path: '/home',
   component: require('../../components/App'),
   indexRoute: {
-    component: require('./Home')
+    component: require('./Dashboard')
   },
   childRoutes: [
     {

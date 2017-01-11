@@ -10,10 +10,10 @@ let initState;
 if (window.__data) {
   initState = window.__data;
 }
-let store = configureStore(browserHistory, initState)
+const store = configureStore(browserHistory, initState)
 const history = syncHistoryWithStore(browserHistory, store)
 
-let rootElement = document.getElementById('app')
+const rootElement = document.getElementById('app')
 render(
   <Provider store={store}>
     <Router routes={routes} history={history} />
@@ -21,8 +21,8 @@ render(
   rootElement
 )
 
-if (__DEVELOPMENT__ && __DEVTOOLS__) {
-  let devtools = document.getElementById('devtools')
+if (DevTools) {
+  const devtools = document.getElementById('devtools')
   render(
     <Provider store={store}>
       <DevTools/>

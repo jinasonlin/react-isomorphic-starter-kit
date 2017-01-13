@@ -25,5 +25,5 @@ router(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, function() {
-  logger.info(`==> 🍺  Express server running at localhost: ${PORT}`);
+  console.info(`==> 🍺  Express server running at localhost: ${PORT}`);
 });

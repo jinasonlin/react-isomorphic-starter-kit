@@ -61,7 +61,12 @@ var config = {
       __CLIENT__: true,
       __SERVER__: false,
     })
-  ]
+  ],
+  postcss: function() {
+    return [
+      require('autoprefixer')
+    ];
+  }
 };
 
 for (var key in config.entry) {

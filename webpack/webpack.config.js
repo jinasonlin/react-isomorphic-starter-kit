@@ -20,7 +20,7 @@ config.output.filename = 'js/[name].[chunkhash:8].js';
 // config.output.publicPath = 'http://static.zhongan.com/website/health/mobile/assets/';
 config.module.loaders.push({ 
   test: /\.scss$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader?importLoaders=1!postcss-loader!sass-loader')
 });
 config.module.loaders.push({
   test: /\.(js|jsx)$/,

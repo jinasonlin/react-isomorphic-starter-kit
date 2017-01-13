@@ -26,6 +26,10 @@ var publicPath = '/';
 if (Boolean(process.env.ALLOW_ISOMORPHIC_PROXY)) {
   hotClient = 'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr';
   publicPath = 'http://' + host + ':' + port + '/';
+  config.plugins.push(
+    // webpack-isomorphic-tools with development
+    webpackIsomorphicToolsPlugin.development()
+  );
 }
 
 var babelLoaderQuery = Object.assign({}, babelConfig, {
@@ -42,7 +46,7 @@ for (var key in config.entry) {
 config.output.publicPath = publicPath;
 config.module.loaders.push({ 
   test: /\.scss$/,
-  loader: 'style-loader!css-loader!autoprefixer-loader!sass-loader'
+  loader: 'style-loader!css-loader?importLoaders=1!postcss-loader!sass-loader'
 });
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
@@ -56,10 +60,6 @@ config.plugins.push(
     __DEVTOOLS__: true,
     __DEBUG__: true
   })
-);
-config.plugins.push(
-  // webpack-isomorphic-tools with development
-  webpackIsomorphicToolsPlugin.development()
 );
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 

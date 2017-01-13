@@ -7,30 +7,32 @@ import config from './config';
 
 const hostName = process.env.HOSTNAME || 'local';
 const logPath = __DEVELOPMENT__ ? `${config.root}/logs` : `/alidata1/admin/${name}/logs`;
+const logFile = `${logPath}/${hostName}_${name}.log`;
+const errorLogFile = `${logPath}/${hostName}_${name}_error.log`;
 
 // validate & create log path folder
-let isCreatedLogPath = true;
+let fileReady = true;
 try {
   !fs.existsSync(logPath) && execSync(`mkdir -p ${logPath}`);
+  !fs.existsSync(errorLogFile) && execSync(`echo > ${errorLogFile}`);
 } catch (e) {
-  isCreatedLogPath = false;
-  console.error('mkdir log path folder error', e);
+  fileReady = false;
+  console.error(`fileReady fail`, e);
 }
 
 let logger = console;
 
-if (isCreatedLogPath) {
+if (fileReady) {
   const fileTransport = new winston.transports.DailyRotateFile({
-    filename: `${logPath}/${hostName}_${name}.log`,
+    filename: logFile,
     datePattern: 'yyyy-MM-dd_',
     prepend: true,
     level: process.env.ENV === 'development' ? 'debug' : 'info',
     timestamp: true,
   });
 
-  const fileExceptionTransport = new winston.transports.DailyRotateFile({
-    filename: `${logPath}/${hostName}_${name}_error.log`,
-    datePattern: 'yyyy-MM-dd_',
+  const fileExceptionTransport = new winston.transports.File({
+    filename: errorLogFile,
     prepend: true,
     timestamp: true,
   });

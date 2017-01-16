@@ -27,9 +27,7 @@ export default function (app) {
       return next();
     }
 
-    if (__DEBUG__) {
-      console.error(err.stack);
-    }
+    logger.error(err.stack);
     res.status(500).render('error', { error: err.stack });
   });
 

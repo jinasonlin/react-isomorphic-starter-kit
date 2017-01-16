@@ -2,6 +2,7 @@ import { serverRouteRender, pageRender } from '../render';
 import routes from 'modules/home/route';
 
 export default function (app) {
+  app.get('/', (req, res) => res.redirect('/home'));
   app.get('/home', (...args) => {
     serverRouteRender({
       page: 'index',

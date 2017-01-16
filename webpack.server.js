@@ -29,6 +29,10 @@ var app = new Express();
 app.use(webpackDevMiddleware(compiler, serverOptions));
 app.use(webpackHotMiddleware(compiler));
 
+app.get('/', function (req, res) {
+  res.redirect('/home');
+});
+
 app.get('*', function (req, res, next) {
   var rootPath = req.path.split('/')[1];
   if (rootPath === 'favicon.ico') {

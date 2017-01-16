@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -14,12 +14,30 @@ function parseJSON(response) {
   return response.json();
 }
 
+/**
+ * fetch json accept api
+ * 仅支持json规范接口调用，如非json规范，请使用isomorphic-fetch
+ */
 export const fetchAPI = (options) => {
-  const { isFormData = false, isSecret, isInclude = true, url, host = '', path = '', method = 'GET', data, success, error, ...others } = options;
+  const {
+    url,
+    host = '',
+    path = '',
+    isFormData = false,   // POST/PUT 表单提交方式
+    isSecret,             // 限制 http或https
+    isInclude = true,     // 限制 credentials; credentials 支持 omit, same-origin, or include
+    method = 'GET',       // 支持 GET POST PUT ...
+    mode = 'cors',        // 支持 cors, no-cors, or same-origin.
+    headers,
+    data,
+    success,
+    error,
+    ...others
+  } = options;
 
   let opts = {
     method,
-    type: 'cors',
+    mode,
     ...others
   };
 
@@ -39,15 +57,19 @@ export const fetchAPI = (options) => {
     opts.credentials = 'include';
   }
 
-  // 配置请求内容
+  // 配置请求头和请求体
   if (!!~['POST', 'PUT'].indexOf(method)) {
     opts.body = data;
   }
   if (!isFormData) {
-    opts.headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    if (!url) {
+      opts.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+    } else {
+      opts.headers = headers;
+    }
     if (!!~['POST', 'PUT'].indexOf(method)) {
       opts.body = JSON.stringify(data);
     }

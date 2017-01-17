@@ -1,4 +1,7 @@
 import fetch from 'isomorphic-fetch';
+import { API } from 'config';
+
+const servies = new Set(Object.keys(API));
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -14,6 +17,36 @@ function parseJSON(response) {
   return response.json();
 }
 
+function getURL({ url, server, host, path = '/', port, isSecret }) {
+  if (url) {
+    return url;
+  }
+
+  let protocol;
+  if (typeof location === 'object') {
+    protocol = location.protocol;
+  }
+  if (typeof isSecret !== 'undefined') {
+    protocol = isSecret ? 'https:' : 'http';
+  }
+
+  let _port = '';
+  if (port) {
+    _port = `:${port}`;
+  }
+
+  let _url;
+  if (server && servies.has(server) && API[server].host) {
+    _url = `${protocol}//${API[server].host}${_port}${path}`;
+  } else if (host) {
+    _url = `${protocol}//${host}${_port}${path}`;
+  } else {
+    _url = path;
+  }
+
+  return _url;
+}
+
 /**
  * fetch json accept api
  * 仅支持json规范接口调用，如非json规范，请使用isomorphic-fetch
@@ -21,10 +54,12 @@ function parseJSON(response) {
 export const fetchAPI = (options) => {
   const {
     url,
+    isSecret,             // 限制 http或https
+    server,
     host = '',
     path = '',
+    port,
     isFormData = false,   // POST/PUT 表单提交方式
-    isSecret,             // 限制 http或https
     isInclude = true,     // 限制 credentials; credentials 支持 omit, same-origin, or include
     method = 'GET',       // 支持 GET POST PUT ...
     mode = 'cors',        // 支持 cors, no-cors, or same-origin.
@@ -41,16 +76,7 @@ export const fetchAPI = (options) => {
     ...others
   };
 
-  // 配置请求地址
-  let protocol;
-  if (typeof location === 'object') {
-    protocol = location.protocol;
-  }
-  if (typeof isSecret !== 'undefined') {
-    protocol = isSecret ? 'https:' : 'http';
-  }
-
-  let _url = url ? url : `${protocol}//${host}${path}`;
+  const _url = getURL({ url, server, host, path, port });
 
   // 配置请求cookies携带
   if (isInclude) {
@@ -71,7 +97,7 @@ export const fetchAPI = (options) => {
       opts.headers = headers;
     }
     if (!!~['POST', 'PUT'].indexOf(method)) {
-      opts.body = JSON.stringify(data);
+      opts.body = JSON.stringify(opts.body);
     }
   }
 

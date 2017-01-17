@@ -17,7 +17,7 @@ function parseJSON(response) {
   return response.json();
 }
 
-function getURL({ url, server, host, path = '/', port, isSecret }) {
+function getURL({ url, isSecret, server, path = '/' }) {
   if (url) {
     return url;
   }
@@ -30,16 +30,11 @@ function getURL({ url, server, host, path = '/', port, isSecret }) {
     protocol = isSecret ? 'https:' : 'http';
   }
 
-  let _port = '';
-  if (port) {
-    _port = `:${port}`;
-  }
-
   let _url;
-  if (server && servies.has(server) && API[server].host) {
-    _url = `${protocol}//${API[server].host}${_port}${path}`;
-  } else if (host) {
-    _url = `${protocol}//${host}${_port}${path}`;
+  let _host = servies.has(server) ? API[server].host : '';
+  if (server && _host) {
+    let _port = API[server].port ? `:${API[server].port}` : '';
+    _url = `${protocol}//${_host}${_port}${path}`;
   } else {
     _url = path;
   }
@@ -49,16 +44,14 @@ function getURL({ url, server, host, path = '/', port, isSecret }) {
 
 /**
  * fetch json accept api
- * 仅支持json规范接口调用，如非json规范，请使用isomorphic-fetch
+ * json规范接口调用，如非json规范，请使用isomorphic-fetch
  */
 export const fetchAPI = (options) => {
   const {
     url,
     isSecret,             // 限制 http或https
     server,
-    host = '',
     path = '',
-    port,
     isFormData = false,   // POST/PUT 表单提交方式
     isInclude = true,     // 限制 credentials; credentials 支持 omit, same-origin, or include
     method = 'GET',       // 支持 GET POST PUT ...
@@ -76,7 +69,7 @@ export const fetchAPI = (options) => {
     ...others
   };
 
-  const _url = getURL({ url, server, host, path, port });
+  const _url = getURL({ url, isSecret, server, path });
 
   // 配置请求cookies携带
   if (isInclude) {
@@ -84,7 +77,7 @@ export const fetchAPI = (options) => {
   }
 
   // 配置请求头和请求体
-  if (!!~['POST', 'PUT'].indexOf(method)) {
+  if (['POST', 'PUT'].includes(method)) {
     opts.body = data;
   }
   if (!isFormData) {
@@ -96,7 +89,7 @@ export const fetchAPI = (options) => {
     } else {
       opts.headers = headers;
     }
-    if (!!~['POST', 'PUT'].indexOf(method)) {
+    if (['POST', 'PUT'].includes(method)) {
       opts.body = JSON.stringify(opts.body);
     }
   }

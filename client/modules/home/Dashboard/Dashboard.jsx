@@ -11,6 +11,7 @@ class Dashboard extends Component{
   render() {
     return (
       <ul className="page-dashboard">
+        <li onClick={() => browserHistory.push('/home/tool')}>Tool</li>
         <li onClick={() => browserHistory.push('/home/server-render')}>ServerRender</li>
         <li onClick={() => browserHistory.push('/home/client-render')}>ClientRender</li>
       </ul>

@@ -22,6 +22,10 @@ const rootRoute = {
       component: require('./ServerRender')
     },
     {
+      path: 'tool',
+      component: require('./Tool')
+    },
+    {
       path: '*',
       getComponent(location, cb) {
         require.ensure([], (require) => {

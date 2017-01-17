@@ -15,7 +15,11 @@ var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./w
 var babelLoaderQuery = require('../babel.json');
 delete babelLoaderQuery.env;
 
-config.devtool = 'source-map';
+// 测试和预发开启source-map
+if (!!~['test', 'pre'].indexOf(process.env.DEPLOY_ENV)) {
+  config.devtool = 'source-map';
+  config.output.sourceMapFilename = 'source-map/[file].map';
+}
 config.output.filename = 'js/[name].[chunkhash:8].js';
 // config.output.publicPath = 'http://static.zhongan.com/website/health/mobile/assets/';
 config.module.loaders.push({ 

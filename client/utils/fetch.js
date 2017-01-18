@@ -17,24 +17,16 @@ function parseJSON(response) {
   return response.json();
 }
 
-function getURL({ url, isSecret, server, path = '/' }) {
+function getURL({ url, server, path = '/' }) {
   if (url) {
     return url;
-  }
-
-  let protocol;
-  if (typeof location === 'object') {
-    protocol = location.protocol;
-  }
-  if (typeof isSecret !== 'undefined') {
-    protocol = isSecret ? 'https:' : 'http';
   }
 
   let _url;
   let _host = servies.has(server) ? API[server].host : '';
   if (server && _host) {
     let _port = API[server].port ? `:${API[server].port}` : '';
-    _url = `${protocol}//${_host}${_port}${path}`;
+    _url = `//${_host}${_port}${path}`;
   } else {
     _url = path;
   }
@@ -49,7 +41,6 @@ function getURL({ url, isSecret, server, path = '/' }) {
 export const fetchAPI = (options) => {
   const {
     url,
-    isSecret,             // 限制 http或https
     server,
     path = '',
     isFormData = false,   // POST/PUT 表单提交方式
@@ -69,7 +60,7 @@ export const fetchAPI = (options) => {
     ...others
   };
 
-  const _url = getURL({ url, isSecret, server, path });
+  const _url = getURL({ url, server, path });
 
   // 配置请求cookies携带
   if (isInclude) {

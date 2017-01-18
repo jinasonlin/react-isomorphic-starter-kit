@@ -5,39 +5,16 @@ import { fetchAPI } from 'utils/fetch';
 import { API } from 'config';
 
 import {
-  Mask,
-  Modal,
-  Alert,
-  Confirm,
-  Toast,
-  Loading,
   Button,
-  Swipe,
   Switch,
   Input,
-  Icon,
   Form,
   Radio,
   Checkbox,
   Select,
-  Menu,
-  Tag,
-  Dropdown,
-  Breadcrumb,
   Table,
-  Pagination,
-  Panel,
-  Step,
-  DatePicker,
-  Calendar,
-  Tooltip,
   Upload,
-  Tab,
-  Message,
-  Progress,
-  Slider
 } from 'dragon-ui';
-
 
 class Page extends Component {
   constructor (props) {
@@ -50,15 +27,17 @@ class Page extends Component {
       server: 'okr',
       path: '/v1/tag/queryTag',
       isInclude: true,
-      method: 'POST',
+      method: 'GET',
       isFormData: false,
-      data: '',
       inputData: JSON.stringify({ name: 'eHR项目组', mission: '支持新时代的人力资源管理' }, undefined, 4),
-      formData: [{ field: '', value: '', file: null , type: 'file' }, { field: '', value: '', file: null, type: 'text' }],
+      formData: [
+        { field: '', value: '', file: null , type: 'text' },
+        { field: '', value: '', file: null, type: 'file' },
+        { field: '', value: '', file: null, type: 'file' }
+      ],
       result: null,
     };
     this.servers = _.keys(API);
-    console.log(this.servers);
   }
 
   dofetch() {
@@ -70,10 +49,10 @@ class Page extends Component {
       let formData = this.state.formData;
       for (let i = 0; i < formData.length; i++) {
         if (formData[i].field && formData[i].type === 'file' && formData[i].file) {
-          fd.append(formData[i].field, formData[i].file)
+          fd.append(formData[i].field, formData[i].file);
         }
         if (formData[i].field && formData[i].type === 'text' && formData[i].value) {
-          fd.append(formData[i].field, formData[i].value)
+          fd.append(formData[i].field, formData[i].value);
         }
       }
       params.data = fd;
@@ -81,7 +60,7 @@ class Page extends Component {
       params.data = JSON.parse(params.inputData);
     }
 
-    fetchAPI({ ...this.state })
+    fetchAPI({ ...params })
       .then(json => {
         console.log('dofetch', json);
         this.setState({result: JSON.stringify(json, undefined, 4)});
@@ -127,7 +106,7 @@ class Page extends Component {
           </Form.Item>
         );
     // do post or put
-    let doPoP = ['POST', 'PUT'].includes(this.state.method);
+    let doPoP = ['POST', 'PUT'].includes(this.state.method.toUpperCase());
     // json请求类型
     let textInput = (
       <Form.Item
@@ -159,33 +138,33 @@ class Page extends Component {
                   <tr key={index}>
                     <td>
                       <input value={data.field} onChange={(e) => {
-                        let formData = this.state.formData;
-                        formData[index].field = e.target.value;
-                        this.setState({ formData });
+                        let formData = this.state.formData[index];
+                        formData.field = e.target.value;
+                        this.setState(formData);
                       }}/>
                     </td>
                     <td>
                       {
                         this.state.formData[index].type === 'file' ? (
                           <input type={data.type} onChange={(e) => {
-                            let formData = this.state.formData;
-                            formData[index].file = e.target.files[0];
-                            this.setState({ formData });
+                            let formData = this.state.formData[index];
+                            formData.file = e.target.files[0];
+                            this.setState(formData);
                           }}/>
                         ) : (
                           <input type={data.type} value={data.value} onChange={(e) => {
-                            let formData = this.state.formData;
-                            formData[index].value = e.target.value;
-                            this.setState({ formData });
+                            let formData = this.state.formData[index];
+                            formData.value = e.target.value;
+                            this.setState(formData);
                           }}/>
                         )
                       }
                     </td>
                     <td>
                       <Select placeholder="请选择" value={data.type} onChange={(data) => {
-                        let formData = this.state.formData;
-                        formData[index].type = data.value;
-                        this.setState({ formData });
+                        let formData = this.state.formData[index];
+                        formData.type = data.value;
+                        this.setState(formData);
                       }}>
                         <Select.Option value="file">File</Select.Option>
                         <Select.Option value="text">Text</Select.Option>
@@ -205,11 +184,11 @@ class Page extends Component {
         <h2 className="title-middle">EHR接口调试</h2>
         <Form type="horizontal">
           <Form.Item
-            label="内置/外部"
+            label="内置请求"
             labelCol="col-sm-2"
             controlCol="col-sm-10"
             theme="error">
-            <Switch isCheckedText="内" unCheckedText="外" defaultValue={this.state.inner}
+            <Switch isCheckedText="是" unCheckedText="否" defaultValue={this.state.inner}
               onChange={(value) => { this.setState({ inner: value }); }}/>
           </Form.Item>
 

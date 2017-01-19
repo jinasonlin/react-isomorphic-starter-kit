@@ -1,20 +1,24 @@
-import React from 'react'
+import React from 'react';
 import { createStore } from 'redux';
-import { createDevTools } from 'redux-devtools'
-import LogMonitor from 'redux-devtools-log-monitor'
-import DockMonitor from 'redux-devtools-dock-monitor'
+import { createDevTools } from 'redux-devtools';
+import LogMonitor from 'redux-devtools-log-monitor';
+import DockMonitor from 'redux-devtools-dock-monitor';
 
-let devTools = null;
-
-if (__DEVELOPMENT__ && __DEVTOOLS__) {
-  devTools = createDevTools(
-    <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
-      <LogMonitor theme="tomorrow" preserveScrollTop={false} />
-    </DockMonitor>
-  );
+function getDevTools() {
+  let devTools = null;
+  if (__DEVELOPMENT__ && __DEVTOOLS__) {
+    devTools = createDevTools(
+      <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
+        <LogMonitor theme="tomorrow" preserveScrollTop={false} />
+      </DockMonitor>,
+    );
+  }
+  return devTools;
 }
 
-export { devTools as DevTools }
+const devTools = getDevTools();
+
+export { devTools as DevTools };
 
 export function configureStore(initialState) {
   let finalCreateStore = createStore;

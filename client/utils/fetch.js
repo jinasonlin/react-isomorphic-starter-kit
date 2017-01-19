@@ -6,11 +6,10 @@ const servies = new Set(Object.keys(API));
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
-  } else {
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
   }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 }
 
 function parseJSON(response) {
@@ -23,9 +22,9 @@ function getURL({ url, server, path = '/' }) {
   }
 
   let _url;
-  let _host = servies.has(server) ? API[server].host : '';
+  const _host = servies.has(server) ? API[server].host : '';
   if (server && _host) {
-    let _port = API[server].port ? `:${API[server].port}` : '';
+    const _port = API[server].port ? `:${API[server].port}` : '';
     _url = `//${_host}${_port}${path}`;
   } else {
     _url = path;
@@ -54,10 +53,10 @@ export const fetchAPI = (options) => {
     ...others
   } = options;
 
-  let opts = {
+  const opts = {
     method,
     mode,
-    ...others
+    ...others,
   };
 
   const _url = getURL({ url, server, path });
@@ -74,11 +73,12 @@ export const fetchAPI = (options) => {
   if (!isFormData) {
     if (!url) {
       opts.headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       };
-    } else {
-      opts.headers = headers;
+    }
+    if (headers) {
+      opts.headers = Object.assign({}, opts.headers, headers);
     }
     if (['POST', 'PUT'].includes(method)) {
       opts.body = JSON.stringify(opts.body);
@@ -89,13 +89,13 @@ export const fetchAPI = (options) => {
     .then(checkStatus)
     .then(parseJSON)
     .then(
-      function (json) {
+      (json) => {
         typeof success === 'function' && success(json);
         return json;
       },
-      function (e) {
+      (e) => {
         typeof error === 'function' && error(e);
         throw e;
-      }
+      },
     );
-}
+};

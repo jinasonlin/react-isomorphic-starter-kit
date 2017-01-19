@@ -1,8 +1,8 @@
-import { name } from '../../package.json';
 import fs from 'fs';
 import { execSync } from 'child_process';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
+import { name } from '../../package.json';
 import config from './config';
 
 const hostName = process.env.HOSTNAME || 'local';
@@ -17,38 +17,44 @@ try {
   !fs.existsSync(errorLogFile) && execSync(`echo > ${errorLogFile}`);
 } catch (e) {
   fileReady = false;
-  console.error(`fileReady fail`, e);
+  console.error('fileReady fail', e);
 }
 
-let logger = console;
+function getLogger() {
+  let logger;
+  if (fileReady) {
+    const fileTransport = new winston.transports.DailyRotateFile({
+      filename: logFile,
+      datePattern: 'yyyy-MM-dd_',
+      prepend: true,
+      level: process.env.ENV === 'development' ? 'debug' : 'info',
+      timestamp: true,
+    });
 
-if (fileReady) {
-  const fileTransport = new winston.transports.DailyRotateFile({
-    filename: logFile,
-    datePattern: 'yyyy-MM-dd_',
-    prepend: true,
-    level: process.env.ENV === 'development' ? 'debug' : 'info',
-    timestamp: true,
-  });
+    const fileExceptionTransport = new winston.transports.File({
+      filename: errorLogFile,
+      prepend: true,
+      timestamp: true,
+    });
 
-  const fileExceptionTransport = new winston.transports.File({
-    filename: errorLogFile,
-    prepend: true,
-    timestamp: true,
-  });
+    const winstonConfig = {
+      transports: [fileTransport],
+    };
 
-  let winstonConfig = {
-    transports: [fileTransport],
-  };
+    if (__DEVELOPMENT__) {
+      winstonConfig.transports.push(new winston.transports.Console({}));
+    } else {
+      winstonConfig.exceptionHandlers = [fileExceptionTransport];
+      winstonConfig.exitOnError = false;
+    }
 
-  if (__DEVELOPMENT__) {
-    winstonConfig.transports.push(new winston.transports.Console({}));
+    logger = new winston.Logger(winstonConfig);
   } else {
-    winstonConfig.exceptionHandlers = [fileExceptionTransport];
-    winstonConfig.exitOnError = false;
+    logger = console;
   }
-
-  logger = new winston.Logger(winstonConfig);
+  return logger;
 }
+
+const logger = getLogger();
 
 export default logger;

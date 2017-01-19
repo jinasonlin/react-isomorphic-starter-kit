@@ -61,7 +61,7 @@ function pageRender({ page, data }, req, res) {
     script = `window.__data = ${JSON.stringify(data)};`;
   }
   res.render(page, {
-    script
+    script,
   });
 }
 
@@ -83,11 +83,12 @@ function serverRouteRender({ page, store, history, routes, data }, req, res) {
       res.redirect(redirect.pathname + redirect.search);
     } else if (props) {
       if (store) {
-        html = renderToString(
+        const component = (
           <Provider store={store}>
             <RouterContext {...props} />
           </Provider>
         );
+        html = renderToString(component);
       } else {
         html = renderToString(<RouterContext {...props} />);
       }
@@ -106,7 +107,7 @@ function serverStaticRender({ page, component, data }, req, res) {
 
   res.render(page, {
     html: component,
-    script
+    script,
   });
 }
 

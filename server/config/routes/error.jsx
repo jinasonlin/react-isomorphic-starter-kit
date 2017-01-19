@@ -1,25 +1,25 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { serverStaticRender } from '../render';
 import NotFoundPage from 'modules/error/notfound';
+import { serverStaticRender } from '../render';
 
 export default function (app) {
-  app.get('/404', function (req, res, ...args) {
+  app.get('/404', (req, res, ...args) => {
     res.status(404);
     serverStaticRender({
       page: 'error',
-      component: renderToString(<NotFoundPage />)
+      component: renderToString(<NotFoundPage />),
     }, req, res, ...args);
   });
-  app.get('/500', function (req, res, ...args) {
+  app.get('/500', (req, res, ...args) => {
     res.status(500);
     serverStaticRender({
       page: 'error',
-      component: renderToString(<NotFoundPage />)
+      component: renderToString(<NotFoundPage />),
     }, req, res, ...args);
   });
 
-  app.use(function (err, req, res, next) {
+  app.use((err, req, res, next) => {
     // treat as 404
     if (err.message
       && (~err.message.indexOf('not found')
@@ -32,7 +32,7 @@ export default function (app) {
   });
 
   // assume 404 since no middleware responded
-  app.use(function (req, res) {
+  app.use((req, res) => {
     res.status(404).render('error', {
       url: req.originalUrl,
       error: 'Not found',

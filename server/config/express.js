@@ -27,7 +27,7 @@ export default function (app) {
   app.set('view engine', 'html');
 
   // check isWechatVisit
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     const ua = req.headers['user-agent'];
     if (/MicroMessenger/.test(ua)) {
       req.isWechatVisit = true;
@@ -39,7 +39,7 @@ export default function (app) {
   });
 
   // expose params to views
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     res.locals.env = __ENV__;
     res.locals.pkg = pkg;
     // set defalut locals

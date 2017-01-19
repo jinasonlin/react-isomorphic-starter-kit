@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router'
-import API from 'config';
+import { browserHistory } from 'react-router';
+import { API } from 'config';
 
-class Dashboard extends Component{
-
+class Dashboard extends Component {
   componentDidMount() {
-    console.log('API config', API);
+    console.info('API config', API);
   }
 
   render() {

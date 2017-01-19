@@ -10,14 +10,11 @@ import {
   Input,
   Form,
   Radio,
-  Checkbox,
   Select,
-  Table,
-  Upload,
 } from 'dragon-ui';
 
 class Page extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       // view config
@@ -31,9 +28,9 @@ class Page extends Component {
       isFormData: false,
       inputData: JSON.stringify({ name: 'eHR项目组', mission: '支持新时代的人力资源管理' }, undefined, 4),
       formData: [
-        { field: '', value: '', file: null , type: 'text' },
+        { field: '', value: '', file: null, type: 'text' },
         { field: '', value: '', file: null, type: 'file' },
-        { field: '', value: '', file: null, type: 'file' }
+        { field: '', value: '', file: null, type: 'file' },
       ],
       result: null,
     };
@@ -45,70 +42,70 @@ class Page extends Component {
 
     // 构造请求data
     if (this.state.isFormData) {
-      let fd = new FormData()
-      let formData = this.state.formData;
-      for (let i = 0; i < formData.length; i++) {
-        if (formData[i].field && formData[i].type === 'file' && formData[i].file) {
-          fd.append(formData[i].field, formData[i].file);
+      const fd = new FormData();
+      const formData = this.state.formData;
+      formData.forEach((item) => {
+        if (item.field && item.type === 'file' && item.file) {
+          fd.append(item.field, item.file);
         }
-        if (formData[i].field && formData[i].type === 'text' && formData[i].value) {
-          fd.append(formData[i].field, formData[i].value);
+        if (item.field && item.type === 'text' && item.value) {
+          fd.append(item.field, item.value);
         }
-      }
+      });
       params.data = fd;
     } else {
       params.data = JSON.parse(params.inputData);
     }
 
     fetchAPI({ ...params })
-      .then(json => {
-        console.log('dofetch', json);
-        this.setState({result: JSON.stringify(json, undefined, 4)});
+      .then((json) => {
+        console.info('dofetch', json);
+        this.setState({ result: JSON.stringify(json, undefined, 4) });
       })
-      .catch(e => {
+      .catch((e) => {
         console.error('dofetch', e);
-        this.setState({result: JSON.stringify({error: '请求失败，通过控制台查看'}, undefined, 4)});
+        this.setState({ result: JSON.stringify({ error: '请求失败，通过控制台查看' }, undefined, 4) });
       });
   }
 
   render() {
     // url/server/path 输入区域
-    let urlInput = this.state.inner
+    const urlInput = this.state.inner
       ? (
-          <div>
-            <Form.Item
-              label="SERVER"
-              labelCol="col-sm-2"
-              controlCol="col-sm-10">
-              <Select radius placeholder="请选择" value={this.state.server} onChange={(data) => { this.setState({ server: data.value }); }}>
-                {
-                  this.servers.map(key => <Select.Option value={key} key={key}>{key}</Select.Option>)
-                }
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="PATH"
-              labelCol="col-sm-2"
-              controlCol="col-sm-10"
-              help="接口路径 http://wiki.zhonganonline.com/pages/viewpage.action?pageId=14712726">
-              <Input placeholder="请输入..."  value={this.state.path} onChange={(e) => { this.setState({ path: e.target.value }); }} />
-            </Form.Item>
-          </div>
-        )
-      : (
+        <div>
           <Form.Item
-            label="URL"
+            label="SERVER"
+            labelCol="col-sm-2"
+            controlCol="col-sm-10">
+            <Select radius placeholder="请选择" value={this.state.server} onChange={(data) => { this.setState({ server: data.value }); }}>
+              {
+                this.servers.map(key => <Select.Option value={key} key={key}>{key}</Select.Option>)
+              }
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="PATH"
             labelCol="col-sm-2"
             controlCol="col-sm-10"
-            help="外部接口请求，如提供地址url，将优先使用url地址去请求">
-            <Input placeholder="请输入..." value={this.state.url} onChange={(e) => { this.setState({ url: e.target.value }); }} />
+            help="接口路径 http://wiki.zhonganonline.com/pages/viewpage.action?pageId=14712726">
+            <Input placeholder="请输入..." value={this.state.path} onChange={(e) => { this.setState({ path: e.target.value }); }} />
           </Form.Item>
-        );
+        </div>
+      )
+      : (
+        <Form.Item
+          label="URL"
+          labelCol="col-sm-2"
+          controlCol="col-sm-10"
+          help="外部接口请求，如提供地址url，将优先使用url地址去请求">
+          <Input placeholder="请输入..." value={this.state.url} onChange={(e) => { this.setState({ url: e.target.value }); }} />
+        </Form.Item>
+      );
     // do post or put
-    let doPoP = ['POST', 'PUT'].includes(this.state.method.toUpperCase());
+    const doPoP = ['POST', 'PUT'].includes(this.state.method.toUpperCase());
     // json请求类型
-    let textInput = (
+    const textInput = (
       <Form.Item
         label="请求数据"
         labelCol="col-sm-2"
@@ -118,7 +115,7 @@ class Page extends Component {
       </Form.Item>
     );
     // 表单请求类型，待优化
-    let formInput = (
+    const formInput = (
       <Form.Item
         label="请求数据"
         labelCol="col-sm-2"
@@ -135,43 +132,54 @@ class Page extends Component {
             {
               this.state.formData.map((data, index) => {
                 return (
-                  <tr key={index}>
+                  <tr key={`index-${index}`}>
                     <td>
-                      <input value={data.field} onChange={(e) => {
-                        let formData = this.state.formData[index];
-                        formData.field = e.target.value;
-                        this.setState(formData);
-                      }}/>
+                      <input
+                        value={data.field}
+                        onChange={(e) => {
+                          const formData = this.state.formData[index];
+                          formData.field = e.target.value;
+                          this.setState(formData);
+                        }}
+                        />
                     </td>
                     <td>
                       {
                         this.state.formData[index].type === 'file' ? (
-                          <input type={data.type} onChange={(e) => {
-                            let formData = this.state.formData[index];
-                            formData.file = e.target.files[0];
-                            this.setState(formData);
-                          }}/>
+                          <input
+                            type={data.type}
+                            onChange={(e) => {
+                              const formData = this.state.formData[index];
+                              formData.file = e.target.files[0];
+                              this.setState(formData);
+                            }}
+                            />
                         ) : (
-                          <input type={data.type} value={data.value} onChange={(e) => {
-                            let formData = this.state.formData[index];
-                            formData.value = e.target.value;
-                            this.setState(formData);
-                          }}/>
+                          <input
+                            type={data.type} value={data.value}
+                            onChange={(e) => {
+                              const formData = this.state.formData[index];
+                              formData.value = e.target.value;
+                              this.setState(formData);
+                            }}
+                            />
                         )
                       }
                     </td>
                     <td>
-                      <Select placeholder="请选择" value={data.type} onChange={(data) => {
-                        let formData = this.state.formData[index];
-                        formData.type = data.value;
-                        this.setState(formData);
-                      }}>
+                      <Select
+                        placeholder="请选择" value={data.type}
+                        onChange={(value) => {
+                          const formData = this.state.formData[index];
+                          formData.type = value.value;
+                          this.setState(formData);
+                        }}>
                         <Select.Option value="file">File</Select.Option>
                         <Select.Option value="text">Text</Select.Option>
                       </Select>
                     </td>
                   </tr>
-                )
+                );
               })
             }
           </tbody>
@@ -188,8 +196,10 @@ class Page extends Component {
             labelCol="col-sm-2"
             controlCol="col-sm-10"
             theme="error">
-            <Switch isCheckedText="是" unCheckedText="否" defaultValue={this.state.inner}
-              onChange={(value) => { this.setState({ inner: value }); }}/>
+            <Switch
+              isCheckedText="是" unCheckedText="否" defaultValue={this.state.inner}
+              onChange={(value) => { this.setState({ inner: value }); }}
+              />
           </Form.Item>
 
           {urlInput}
@@ -199,33 +209,36 @@ class Page extends Component {
             labelCol="col-sm-2"
             controlCol="col-sm-10"
             theme="error">
-            <Switch isCheckedText="是" unCheckedText="否" defaultValue={this.state.isInclude}
-              onChange={(value) => { this.setState({ isInclude: value}); }}/>
+            <Switch
+              isCheckedText="是" unCheckedText="否" defaultValue={this.state.isInclude}
+              onChange={(value) => { this.setState({ isInclude: value }); }}
+              />
           </Form.Item>
 
           <Form.Item
             label="请求类型"
             labelCol="col-sm-2"
             controlCol="col-sm-10">
-            <Radio.Group defaultValue={this.state.method} onChange={(e) => { this.setState({ method: e.target.value}); }}>
+            <Radio.Group defaultValue={this.state.method} onChange={(e) => { this.setState({ method: e.target.value }); }}>
               <Radio value="GET">GET</Radio>
               <Radio value="POST">POST</Radio>
             </Radio.Group>
           </Form.Item>
 
-          { doPoP && (
-              <div>
-                <Form.Item
-                  label="表单请求类型"
-                  labelCol="col-sm-2"
-                  controlCol="col-sm-10"
-                  theme="error">
-                  <Switch isCheckedText="是" unCheckedText="否" defaultValue={this.state.isFormData}
-                    onChange={(value) => { this.setState({ isFormData: value }); }}/>
-                </Form.Item>
-                {this.state.isFormData ? formInput : textInput}
-              </div>
-            )
+          { doPoP &&
+            <div>
+              <Form.Item
+                label="表单请求类型"
+                labelCol="col-sm-2"
+                controlCol="col-sm-10"
+                theme="error">
+                <Switch
+                  isCheckedText="是" unCheckedText="否" defaultValue={this.state.isFormData}
+                  onChange={(value) => { this.setState({ isFormData: value }); }}
+                  />
+              </Form.Item>
+              {this.state.isFormData ? formInput : textInput}
+            </div>
           }
 
           <Form.Item

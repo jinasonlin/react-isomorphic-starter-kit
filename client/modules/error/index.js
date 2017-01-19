@@ -4,6 +4,6 @@ import NotFoundPage from './notfound';
 
 ReactDOM.render(
   <NotFoundPage />,
-  document.getElementById('app')
+  document.getElementById('app'),
 );
 

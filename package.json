@@ -8,7 +8,7 @@
     "start": "NODE_PATH=./client node server.js",
     "start:dev": "NODE_PATH=./client nodemon server.js",
     "build": "webpack --config webpack/webpack.config.js",
-    "eslint": "eslint --ext .jsx --ext .js server client; exit 0",
+    "eslint": "eslint --ext .jsx --ext .js  client; exit 0",
     "dev": "node webpack.server.js"
   },
   "dependencies": {

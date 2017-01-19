@@ -3,7 +3,7 @@ export {
   INCREMENT,
   DECREMENT,
   increment,
-  decrement
+  decrement,
 } from './counter';
 
 // export todos
@@ -14,5 +14,5 @@ export {
   VisibilityFilters,
   addTodo,
   completeTodo,
-  setVisibilityFilter
+  setVisibilityFilter,
 } from './todo';

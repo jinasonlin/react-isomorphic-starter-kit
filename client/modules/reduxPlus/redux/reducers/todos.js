@@ -1,12 +1,13 @@
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from '../actions';
+
 const { SHOW_ALL } = VisibilityFilters;
 
 export function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
-      return action.filter
+      return action.filter;
     default:
-      return state
+      return state;
   }
 }
 
@@ -17,18 +18,18 @@ export function todos(state = [], action) {
         ...state,
         {
           text: action.text,
-          completed: false
-        }
-      ]
+          completed: false,
+        },
+      ];
     case COMPLETE_TODO:
       return [
         ...state.slice(0, action.index),
         Object.assign({}, state[action.index], {
-          completed: true
+          completed: true,
         }),
-        ...state.slice(action.index + 1)
-      ]
+        ...state.slice(action.index + 1),
+      ];
     default:
-      return state
+      return state;
   }
 }

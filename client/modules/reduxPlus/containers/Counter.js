@@ -1,21 +1,21 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { increment, decrement } from '../redux/actions'
+import { increment, decrement } from '../redux/actions';
 
 class Counter extends Component {
-  incrementIfOdd = () => {
+  incrementIfOdd() {
     if (this.props.value % 2 !== 0) {
-      this.props.onIncrement()
+      this.props.onIncrement();
     }
   }
 
-  incrementAsync = () => {
-    setTimeout(this.props.onIncrement, 1000)
+  incrementAsync() {
+    setTimeout(this.props.onIncrement, 1000);
   }
 
   render() {
-    const { value, onIncrement, onDecrement } = this.props
+    const { value, onIncrement, onDecrement } = this.props;
     return (
       <p>
         Clicked: {value} times
@@ -38,20 +38,20 @@ class Counter extends Component {
         <br />
         <Link to="/reduxPlus">TODO</Link>
       </p>
-    )
+    );
   }
 }
 
 Counter.propTypes = {
   value: PropTypes.number.isRequired,
   onIncrement: PropTypes.func.isRequired,
-  onDecrement: PropTypes.func.isRequired
-}
+  onDecrement: PropTypes.func.isRequired,
+};
 
 function mapStateToProps(state) {
   return {
-    value: state.counter
-  }
+    value: state.counter,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -61,8 +61,8 @@ function mapDispatchToProps(dispatch) {
     },
     onDecrement() {
       dispatch(decrement());
-    }
-  }
+    },
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);

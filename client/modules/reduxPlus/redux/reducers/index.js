@@ -8,5 +8,5 @@ export default combineReducers({
   routing: routerReducer,
   counter,
   visibilityFilter,
-  todos
+  todos,
 });

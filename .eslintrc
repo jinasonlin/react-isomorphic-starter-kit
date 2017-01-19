@@ -42,6 +42,7 @@
     "import/no-unresolved": "off",
     "import/extensions": "off",
     "react/prefer-stateless-function": "off",
+    "import/prefer-default-export": "warn",
     "react/prop-types": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/jsx-closing-bracket-location": ["error", { selfClosing: "props-aligned", nonEmpty: "after-props" }],

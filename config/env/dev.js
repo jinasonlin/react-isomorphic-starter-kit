@@ -1,5 +1,8 @@
 export default {
   API: {
+    xena: {
+      host: '11377-iyunbao-broker-iyb-xena.test.za.net'
+    },
     okr: {
       host: '11549-ps-ehr-ehrs-okr.test.za.net'
     },

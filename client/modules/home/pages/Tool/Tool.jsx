@@ -16,17 +16,25 @@ import {
 class Page extends Component {
   constructor(props) {
     super(props);
+    this.servers = _.keys(API);
     this.state = {
       // view config
       inner: true,
       // fetch config
       url: '',
-      server: 'okr',
-      path: '/v1/tag/queryTag',
+      server: this.servers[0],
+      path: '/v1/api/account/login/cache',
       isInclude: true,
-      method: 'GET',
+      method: 'POST',
       isFormData: false,
-      inputData: JSON.stringify({ name: 'eHR项目组', mission: '支持新时代的人力资源管理' }, undefined, 4),
+      inputData: JSON.stringify({
+        userId: 50002385002,
+        targetId: 50001750001,
+        accountType: '1',
+        accountStatus: '1',
+        id: 50002400002,
+        accessKey: '4a67787192a433b9e9077944cf993e0e3',
+      }, undefined, 4),
       formData: [
         { field: '', value: '', file: null, type: 'text' },
         { field: '', value: '', file: null, type: 'file' },
@@ -34,7 +42,6 @@ class Page extends Component {
       ],
       result: null,
     };
-    this.servers = _.keys(API);
   }
 
   dofetch() {
@@ -88,7 +95,7 @@ class Page extends Component {
             label="PATH"
             labelCol="col-sm-2"
             controlCol="col-sm-10"
-            help="接口路径 http://wiki.zhonganonline.com/pages/viewpage.action?pageId=14712726">
+            help="接口路径 众安wiki http://wiki.zhonganonline.com/pages/viewpage.action">
             <Input placeholder="请输入..." value={this.state.path} onChange={(e) => { this.setState({ path: e.target.value }); }} />
           </Form.Item>
         </div>
@@ -189,7 +196,7 @@ class Page extends Component {
 
     return (
       <div className="page-tool">
-        <h2 className="title-middle">EHR接口调试</h2>
+        <h2 className="title-middle">接口调试</h2>
         <Form type="horizontal">
           <Form.Item
             label="内置请求"

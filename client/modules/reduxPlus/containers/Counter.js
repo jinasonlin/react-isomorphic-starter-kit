@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { Form, Button } from 'dragon-ui';
 import { increment, decrement } from '../redux/actions';
+import './index.scss';
 
 class Counter extends Component {
   incrementIfOdd() {
@@ -17,27 +19,35 @@ class Counter extends Component {
   render() {
     const { value, onIncrement, onDecrement } = this.props;
     return (
-      <p>
-        Clicked: {value} times
-        {' '}
-        <button onClick={onIncrement}>
-          +
-        </button>
-        {' '}
-        <button onClick={onDecrement}>
-          -
-        </button>
-        <br />
-        <button onClick={() => this.incrementIfOdd()}>
-          Increment if odd
-        </button>
-        {' '}
-        <button onClick={() => this.incrementAsync()}>
-          Increment async
-        </button>
-        <br />
-        <Link to="/reduxPlus">TODO</Link>
-      </p>
+      <Form type="horizontal" className="container-counter">
+        <Form.Item
+          label="Clicked"
+          labelCol="col-sm-2"
+          controlCol="col-sm-10">
+          {value} times
+        </Form.Item>
+        <Form.Item
+          label="加减"
+          labelCol="col-sm-2"
+          controlCol="col-sm-10">
+          <Button theme="success" onClick={onIncrement}>+</Button>
+          <Button theme="success" onClick={onDecrement}>-</Button>
+        </Form.Item>
+        <Form.Item
+          label="附加"
+          labelCol="col-sm-2"
+          controlCol="col-sm-10">
+          <Button theme="success" onClick={() => this.incrementIfOdd()}>Increment if odd</Button>
+          <Button theme="success" onClick={() => this.incrementAsync()}>Increment async</Button>
+        </Form.Item>
+        <Form.Item
+          label
+          labelCol="col-sm-2"
+          controlCol="col-sm-10">
+          <Link to="/reduxPlus"><Button theme="success">TODO</Button></Link>
+          <Link to="/reduxPlus/distance"><Button theme="warning">Distance</Button></Link>
+        </Form.Item>
+      </Form>
     );
   }
 }

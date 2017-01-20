@@ -6,7 +6,7 @@ import AddTodo from '../components/AddTodo';
 import TodoList from '../components/TodoList';
 import Footer from '../components/Footer';
 
-class App extends Component {
+class Todo extends Component {
   render() {
     const { visibleTodos, visibilityFilter } = this.props;
     const { onAddClick, onTodoClick, onFilterChange } = this.props;
@@ -30,12 +30,14 @@ class App extends Component {
           }
           />
         <Link to="/reduxPlus/counter">Counter</Link>
+        <br />
+        <Link to="/reduxPlus/distance">Distance</Link>
       </div>
     );
   }
 }
 
-App.propTypes = {
+Todo.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
@@ -79,4 +81,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);

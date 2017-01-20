@@ -34,7 +34,7 @@
     "react-redux": "^5.0.2",
     "react-router": "^2.5.0",
     "react-router-redux": "^4.0.7",
-    "redux-thunk": "^2.1.0",
+    "redux-thunk": "^2.2.0",
     "serve-favicon": "^2.3.2",
     "webpack-isomorphic-tools": "^2.6.5",
     "winston": "^2.2.0",

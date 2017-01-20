@@ -1,3 +1,11 @@
+// export loading
+export {
+  ADDLOADING,
+  REMOVELOADING,
+  addLoading,
+  removeLoading,
+} from './loading';
+
 // export counter
 export {
   INCREMENT,
@@ -16,3 +24,10 @@ export {
   completeTodo,
   setVisibilityFilter,
 } from './todo';
+
+// export distance
+export {
+  REQUEST,
+  RECEIVE,
+  calculate,
+} from './distance';

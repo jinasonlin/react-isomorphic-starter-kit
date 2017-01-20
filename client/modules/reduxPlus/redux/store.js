@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
+import thunkMiddleware from 'redux-thunk';
 import { createDevTools } from 'redux-devtools';
 import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
@@ -34,7 +35,7 @@ export { DevTools, DevToolsInner };
 export function configureStore(history, initialState) {
   const reduxRouterMiddleware = routerMiddleware(history);
 
-  const middleware = [reduxRouterMiddleware];
+  const middleware = [reduxRouterMiddleware, thunkMiddleware];
 
   let finalCreateStore;
   if (DevToolsInstrument) {

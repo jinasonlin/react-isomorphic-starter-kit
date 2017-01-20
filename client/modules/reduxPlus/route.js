@@ -1,6 +1,6 @@
 const rootRoute = {
   path: '/reduxPlus',
-  component: require('../../components/App'),
+  component: require('./components/App'),
   indexRoute: {
     component: require('./containers/Todo'),
   },

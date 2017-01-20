@@ -67,7 +67,7 @@ export const fetchAPI = (options) => {
   }
 
   // 配置请求头和请求体
-  if (['POST', 'PUT'].includes(method)) {
+  if (!!~['POST', 'PUT'].indexOf(method)) {
     opts.body = data;
   }
   if (!isFormData) {
@@ -80,7 +80,7 @@ export const fetchAPI = (options) => {
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
     }
-    if (['POST', 'PUT'].includes(method)) {
+    if (!!~['POST', 'PUT'].indexOf(method)) {
       opts.body = JSON.stringify(opts.body);
     }
   }

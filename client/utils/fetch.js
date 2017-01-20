@@ -1,5 +1,8 @@
+import promise from 'es6-promise'
 import fetch from 'isomorphic-fetch';
 import { API } from 'config';
+
+promise.polyfill();
 
 const servies = new Set(Object.keys(API));
 

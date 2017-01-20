@@ -11,7 +11,7 @@ class Counter extends Component {
   }
 
   incrementAsync() {
-    setTimeout(this.props.onIncrement, 1000);
+    setTimeout(this.props.onIncrement, 1500);
   }
 
   render() {
@@ -28,11 +28,11 @@ class Counter extends Component {
           -
         </button>
         <br />
-        <button onClick={this.incrementIfOdd}>
+        <button onClick={() => this.incrementIfOdd()}>
           Increment if odd
         </button>
         {' '}
-        <button onClick={this.incrementAsync}>
+        <button onClick={() => this.incrementAsync()}>
           Increment async
         </button>
         <br />

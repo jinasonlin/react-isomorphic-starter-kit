@@ -6,20 +6,30 @@ import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
 
 function getDevTools() {
-  let devTools = null;
+  let DevTools;
+  let DevToolsInstrument;
+  let DevToolsInner = true;
   if (__DEVELOPMENT__ && __DEVTOOLS__) {
-    devTools = createDevTools(
+    DevTools = createDevTools(
       <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
         <LogMonitor theme="tomorrow" preserveScrollTop={false} />
       </DockMonitor>,
     );
   }
-  return devTools;
+  if (DevTools) {
+    if (__CLIENT__ && window.devToolsExtension) {
+      DevToolsInstrument = window.devToolsExtension();
+      DevToolsInner = false;
+    } else {
+      DevToolsInstrument = DevTools.instrument();
+    }
+  }
+  return { DevTools, DevToolsInstrument, DevToolsInner };
 }
 
-const devTools = getDevTools();
+const { DevTools, DevToolsInstrument, DevToolsInner } = getDevTools();
 
-export { devTools as DevTools };
+export { DevTools, DevToolsInner };
 
 export function configureStore(history, initialState) {
   const reduxRouterMiddleware = routerMiddleware(history);
@@ -27,8 +37,8 @@ export function configureStore(history, initialState) {
   const middleware = [reduxRouterMiddleware];
 
   let finalCreateStore;
-  if (devTools) {
-    finalCreateStore = compose(applyMiddleware(...middleware), devTools.instrument())(createStore);
+  if (DevToolsInstrument) {
+    finalCreateStore = compose(applyMiddleware(...middleware), DevToolsInstrument)(createStore);
   } else {
     finalCreateStore = applyMiddleware(...middleware)(createStore);
   }

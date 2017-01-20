@@ -110,7 +110,7 @@ class Page extends Component {
         </Form.Item>
       );
     // do post or put
-    const doPoP = ['POST', 'PUT'].includes(this.state.method.toUpperCase());
+    const doPoP = !!~['POST', 'PUT'].indexOf(this.state.method.toUpperCase());
     // json请求类型
     const textInput = (
       <Form.Item

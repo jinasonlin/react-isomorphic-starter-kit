@@ -23,7 +23,7 @@ combinedPresets = combinedPresets.concat(babelrcObjectDevelopment.presets);
 // 加载ALLOW_ISOMORPHIC参数，并配置; 仅基于webpack开发服务器
 var hotClient = 'webpack-hot-middleware/client';
 var publicPath = '/';
-if (Boolean(process.env.ALLOW_ISOMORPHIC_PROXY)) {
+if (process.env.ALLOW_ISOMORPHIC_PROXY === 'true') {
   hotClient = 'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr';
   publicPath = 'http://' + host + ':' + port + '/';
   config.plugins.push(
@@ -57,8 +57,8 @@ config.module.loaders.push({
 config.plugins.push(
   new webpack.DefinePlugin({
     __DEVELOPMENT__: true,
-    __DEVTOOLS__: true,
-    __DEBUG__: true
+    __DEVTOOLS__: process.env.DEVTOOLS === 'true',
+    __DEBUG__: process.env.DEBUG === 'true'
   })
 );
 config.plugins.push(new webpack.HotModuleReplacementPlugin());

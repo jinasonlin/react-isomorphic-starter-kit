@@ -1,4 +1,4 @@
-import promise from 'es6-promise'
+import promise from 'es6-promise';
 import fetch from 'isomorphic-fetch';
 import { API } from 'config';
 

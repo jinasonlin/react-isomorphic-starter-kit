@@ -69,6 +69,29 @@ var config = {
   }
 };
 
+var entry = process.env.ENTRY ? process.env.ENTRY.split(';') : [];
+var entryFilter = process.env.ENTRYFILTER ? process.env.ENTRYFILTER.split(';') : [];
+
+if (entry.length) {
+  var _entry = {};
+  for (var entryKey in config.entry) {
+    if (~entry.indexOf(entryKey)) {
+      _entry[entryKey] = config.entry[entryKey];
+    }
+  }
+  config.entry = _entry;
+}
+
+if (entryFilter.length) {
+  var _entry = {};
+  for (var entryFilterKey in config.entry) {
+    if (!~entryFilter.indexOf(entryFilterKey)) {
+      _entry[entryFilterKey] = config.entry[entryFilterKey];
+    }
+  }
+  config.entry = _entry;
+}
+
 for (var key in config.entry) {
   config.plugins.push(new HtmlWebpackPlugin({
     filename: 'views/' + key + '.html',

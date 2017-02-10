@@ -21,6 +21,9 @@ function parseJSON(response) {
 
 function getURL({ url, server, path = '/' }) {
   if (url) {
+    if (!/^(http:\/\/|https:\/\/|\/\/)/.test(url)) {
+      return `//${url}`;
+    }
     return url;
   }
 
@@ -63,6 +66,9 @@ export const fetchAPI = (options) => {
   };
 
   const _url = getURL({ url, server, path });
+  if (!_url) {
+    throw new Error('Missing request address');
+  }
 
   // 配置请求cookies携带
   if (isInclude) {

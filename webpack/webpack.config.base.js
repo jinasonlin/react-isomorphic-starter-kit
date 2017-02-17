@@ -8,7 +8,7 @@ var rootPath = path.resolve(__dirname, '..');
 var config = {
   context: rootPath,
   entry: {
-    'index': [
+    'home': [
       './client/modules/home/index.js'
     ],
     'redux': [
@@ -17,8 +17,14 @@ var config = {
     'reduxPlus': [
       './client/modules/reduxPlus/index.js'
     ],
-    'error': [
-      './client/modules/error/index.js'
+    'error_403': [
+      './client/modules/error/403.js'
+    ],
+    'error_404': [
+      './client/modules/error/404.js'
+    ],
+    'error_500': [
+      './client/modules/error/500.js'
     ]
   },
   output: {

@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import NotFoundPage from './notfound';
+import NotFoundView from './components/notfound';
 
 ReactDOM.render(
-  <NotFoundPage />,
+  <NotFoundView />,
   document.getElementById('app'),
 );
-

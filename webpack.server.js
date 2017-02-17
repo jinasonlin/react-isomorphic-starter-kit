@@ -34,7 +34,11 @@ app.get('/', function (req, res) {
 });
 
 app.get('*', function (req, res, next) {
-  var rootPath = req.path.split('/')[1];
+  var paths = req.path.split('/');
+  var rootPath = paths[1];
+  if (rootPath === 'ceres') {
+    rootPath = paths[2];
+  }
   if (rootPath === 'favicon.ico') {
     return next();
   }
@@ -46,7 +50,28 @@ app.get('*', function (req, res, next) {
   if (rootPath.length > 20) {
     return next();
   }
-  res.sendFile(path.join(__dirname, 'client/views', rootPath + '.html'));
+
+  // 页面模版
+  var view = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <title>众安在线${rootPath}</title>
+      </head>
+      <body>
+        <div id="app"></div>
+        <div id="devtools" />
+        <script type="text/javascript" src="/js/vendors.js"></script>
+        <script type="text/javascript" src="/js/${rootPath}.js"></script>
+      </body>
+    </html>
+  `;
+  res.send(view);
 });
 
 app.listen(port, function onAppListening(err) {

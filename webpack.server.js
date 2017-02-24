@@ -36,9 +36,6 @@ app.get('/', function (req, res) {
 app.get('*', function (req, res, next) {
   var paths = req.path.split('/');
   var rootPath = paths[1];
-  if (rootPath === 'ceres') {
-    rootPath = paths[2];
-  }
   if (rootPath === 'favicon.ico') {
     return next();
   }

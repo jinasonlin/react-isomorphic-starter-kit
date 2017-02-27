@@ -48,8 +48,19 @@ export default function (app) {
     next();
   });
 
-  // cookieParser should be above session
+  // cookieParser should be above session, if use session.
   app.use(cookieParser());
 
+  // set '_e' in cookie
+  app.use((req, res, next) => {
+    const list = ['dev', 'test,', 'pre', 'prd'];
+    const value = list.indexOf(__ENV__);
+    if (!req.cookies._e || req.cookies._e !== value) {
+      res.cookie('_e', value);
+    }
+    next();
+  });
+
+  app.disabled('x-powered-by');
   app.enable('trust proxy');
 }

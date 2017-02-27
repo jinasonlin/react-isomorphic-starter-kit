@@ -10,6 +10,24 @@ const configs = {
   prd: Object.assign({}, prd),
 };
 
-const config = configs[__ENV__ || 'dev'];
+const list = ['dev', 'test,', 'pre', 'prd'];
+let env = list[0];
+
+if (__SERVER__) {
+  env = __ENV__;
+}
+if (__CLIENT__) {
+  const getCookie = function (name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(';').shift();
+    }
+    return 0;
+  };
+  env = list[getCookie('_e')] || env;
+}
+
+const config = configs[env];
 
 export default config;

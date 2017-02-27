@@ -63,7 +63,6 @@ var config = {
     // ignore dev config
     new webpack.IgnorePlugin(/\.\/dev/, /\/config$/),
     new webpack.DefinePlugin({
-      __ENV__: JSON.stringify(process.env.DEPLOY_ENV || 'dev'),
       __CLIENT__: true,
       __SERVER__: false,
     })

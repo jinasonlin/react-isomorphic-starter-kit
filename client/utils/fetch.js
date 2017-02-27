@@ -22,9 +22,15 @@ function parseJSON(response) {
 function getURL({ url, server, path = '/' }) {
   if (url) {
     if (!/^(http:\/\/|https:\/\/|\/\/)/.test(url)) {
-      return `//${url}`;
+      return {
+        _url: `//${url}`,
+        _host: true,
+      };
     }
-    return url;
+    return {
+      _url: url,
+      _host: true,
+    };
   }
 
   let _url;
@@ -36,42 +42,51 @@ function getURL({ url, server, path = '/' }) {
     _url = path;
   }
 
-  return _url;
+  return {
+    _url,
+    _host,
+  };
 }
 
 /**
  * fetch json accept api
  * json规范接口调用，如非json规范，请使用isomorphic-fetch
+ * 默认允许跨域请求和cookies跨域携带
  */
 export const fetchAPI = (options) => {
   const {
     url,
     server,
     path = '',
-    isFormData = false,   // POST/PUT 表单提交方式
-    isInclude = true,     // 限制 credentials; credentials 支持 omit, same-origin, or include
-    method = 'GET',       // 支持 GET POST PUT ...
-    mode = 'cors',        // 支持 cors, no-cors, or same-origin.
+    method = 'GET',             // 支持 GET POST PUT ...
+    mode,                       // 支持 no-cors(默认), cors, same-origin.
+    isFormData = false,         // POST/PUT 表单提交方式
+    withCredentials = true,     // 限制 credentials; credentials 支持 omit(默认), include, same-origin
+                                // 注意: 这不会影响同站(same-site)请求.
     headers,
     data,
     success,
     error,
-    ...others
   } = options;
 
   const opts = {
     method,
-    mode,
-    ...others,
   };
+  if (mode) {
+    opts.mode = mode;
+  }
 
-  const _url = getURL({ url, server, path });
+  // 配置请求地址
+  const { _url, _host } = getURL({ url, server, path });
   if (!_url) {
     throw new Error('Missing request address');
   }
+  if (_host && !mode) {
+    opts.mode = 'cors';
+  }
 
   // 配置请求cookies携带
-  if (isInclude) {
+  if (withCredentials) {
     opts.credentials = 'include';
   }
 
@@ -81,10 +96,10 @@ export const fetchAPI = (options) => {
   }
   if (!isFormData) {
     if (!url) {
-      opts.headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      };
+      // opts.headers = {
+      //   Accept: 'application/json',
+      //   'Content-Type': 'application/json',
+      // };
     }
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
@@ -93,6 +108,8 @@ export const fetchAPI = (options) => {
       opts.body = JSON.stringify(opts.body);
     }
   }
+
+  __DEBUG__ && console.debug(_url, opts);
 
   return fetch(_url, opts)
     .then(checkStatus)

@@ -29,7 +29,7 @@ export function calculate(params) {
     function getLocations({ work, home }, key) {
       const addressString = `${work}|${home}`;
       const url = `${location.protocol}//restapi.amap.com/v3/geocode/geo?address=${addressString}&batch=true&key=${key}`;
-      return fetchAPI({ url, isInclude: false })
+      return fetchAPI({ url, withCredentials: false })
         .then(json => ({
           origins: json.geocodes[0].location,
           destination: json.geocodes[1].location,
@@ -38,7 +38,7 @@ export function calculate(params) {
 
     function getDistance({ origins, destination }, key) {
       const url = `${location.protocol}//restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${key}`;
-      return fetchAPI({ url, isInclude: false })
+      return fetchAPI({ url, withCredentials: false })
         .then(json => json.results[0].distance);
     }
 

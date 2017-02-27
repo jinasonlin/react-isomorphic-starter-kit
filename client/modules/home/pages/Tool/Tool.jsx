@@ -23,19 +23,17 @@ class Page extends Component {
       // fetch config
       url: '',
       server: this.servers[0],
-      path: '/v1/api/account/login/cache',
-      isInclude: true,
-      method: 'POST',
+      path: '/api/example',
+      withCredentials: true,
+      method: 'GET',
       isFormData: false,
       inputData: JSON.stringify({
-        userId: 50002385002,
-        targetId: 50001750001,
-        accountType: '1',
-        accountStatus: '1',
-        id: 50002400002,
-        accessKey: '4a67787192a433b9e9077944cf993e0e3',
+        paramsA: 'a',
+        paramsB: 'b',
+        paramsC: 'c',
       }, undefined, 4),
       formData: [
+        { field: '', value: '', file: null, type: 'text' },
         { field: '', value: '', file: null, type: 'text' },
         { field: '', value: '', file: null, type: 'file' },
         { field: '', value: '', file: null, type: 'file' },
@@ -212,13 +210,13 @@ class Page extends Component {
           {urlInput}
 
           <Form.Item
-            label="包含cookies"
+            label="携带cookies"
             labelCol="col-sm-2"
             controlCol="col-sm-10"
             theme="error">
             <Switch
-              isCheckedText="是" unCheckedText="否" defaultValue={this.state.isInclude}
-              onChange={(value) => { this.setState({ isInclude: value }); }}
+              isCheckedText="是" unCheckedText="否" defaultValue={this.state.withCredentials}
+              onChange={(value) => { this.setState({ withCredentials: value }); }}
               />
           </Form.Item>
 

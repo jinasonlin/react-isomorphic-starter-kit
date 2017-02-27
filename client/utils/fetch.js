@@ -19,32 +19,54 @@ function parseJSON(response) {
   return response.json();
 }
 
+// TODO(优化路径正则匹配)
 function getURL({ url, server, path = '/' }) {
+  const PATH = /^\/[0-9a-zA-Z]+/;
+  const URL = /^(http:\/\/|https:\/\/|\/\/)/;
+
+  // url为路径，_cors: false
+  // url非地址，自动补全“//”。_cors: true
   if (url) {
-    if (!/^(http:\/\/|https:\/\/|\/\/)/.test(url)) {
+    if (PATH.test(url)) {
+      return {
+        _url: url,
+        _cors: false,
+      };
+    }
+    if (!URL.test(url)) {
       return {
         _url: `//${url}`,
-        _host: true,
+        _cors: true,
       };
     }
     return {
       _url: url,
-      _host: true,
+      _cors: true,
     };
   }
 
   let _url;
+  let _cors = false;
   const _host = servies.has(server) ? API[server].host : '';
   if (server && _host) {
-    const _port = API[server].port ? `:${API[server].port}` : '';
-    _url = `//${_host}${_port}${path}`;
+    // _host为路径时，不补全
+    // _host为地址时，_cors = true
+    if (PATH.test(_host)) {
+      _url = `${_host}${path}`;
+    } else {
+      // _host非地址，自动补全“//”
+      if (!URL.test(_host)) {
+        _url = `//${_host}${path}`;
+      }
+      _cors = true;
+    }
   } else {
     _url = path;
   }
 
   return {
     _url,
-    _host,
+    _cors,
   };
 }
 
@@ -77,11 +99,11 @@ export const fetchAPI = (options) => {
   }
 
   // 配置请求地址
-  const { _url, _host } = getURL({ url, server, path });
+  const { _url, _cors } = getURL({ url, server, path });
   if (!_url) {
     throw new Error('Missing request address');
   }
-  if (_host && !mode) {
+  if (_cors && !mode) {
     opts.mode = 'cors';
   }
 

@@ -6,7 +6,7 @@ promise.polyfill();
 
 const servies = new Set(Object.keys(API));
 
-function checkStatus(response) {
+function _checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
@@ -15,12 +15,12 @@ function checkStatus(response) {
   throw error;
 }
 
-function parseJSON(response) {
+function _parseJSON(response) {
   return response.json();
 }
 
 // TODO(优化路径正则匹配)
-function getURL({ url, server, path = '/' }) {
+function _getURL({ url, server, path = '/' }) {
   const PATH = /^\/[0-9a-zA-Z]+/;
   const URL = /^(http:\/\/|https:\/\/|\/\/)/;
 
@@ -99,7 +99,7 @@ export const fetchAPI = (options) => {
   }
 
   // 配置请求地址
-  const { _url, _cors } = getURL({ url, server, path });
+  const { _url, _cors } = _getURL({ url, server, path });
   if (!_url) {
     throw new Error('Missing request address');
   }
@@ -117,12 +117,13 @@ export const fetchAPI = (options) => {
     opts.body = data;
   }
   if (!isFormData) {
-    if (!url) {
-      // opts.headers = {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'application/json',
-      // };
-    }
+    // 耦合的接口配置默认请求头，非必需
+    // if (!url) {
+    //   opts.headers = {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   };
+    // }
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
     }
@@ -134,8 +135,8 @@ export const fetchAPI = (options) => {
   __DEBUG__ && console.debug(_url, opts);
 
   return fetch(_url, opts)
-    .then(checkStatus)
-    .then(parseJSON)
+    .then(_checkStatus)
+    .then(_parseJSON)
     .then(
       (json) => {
         typeof success === 'function' && success(json);
@@ -146,4 +147,9 @@ export const fetchAPI = (options) => {
         throw e;
       },
     );
+};
+
+export const getURL = (...args) => {
+  const { _url } = _getURL(...args);
+  return _url;
 };

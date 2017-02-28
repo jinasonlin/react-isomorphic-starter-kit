@@ -61,6 +61,6 @@ export default function (app) {
     next();
   });
 
-  app.disabled('x-powered-by');
+  app.disable('x-powered-by');
   app.enable('trust proxy');
 }

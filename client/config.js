@@ -10,7 +10,7 @@ const configs = {
   prd: Object.assign({}, prd),
 };
 
-const list = ['dev', 'test,', 'pre', 'prd'];
+const list = ['dev', 'test', 'pre', 'prd'];
 let env = list[0];
 
 if (__SERVER__) {

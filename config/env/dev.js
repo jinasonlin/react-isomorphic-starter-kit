@@ -1,10 +1,10 @@
 export default {
   API: {
     native: {
-      host: ''
+      host: '',
     },
     amap: {
-      host: 'restapi.amap.com'
-    }
-  }
+      host: 'restapi.amap.com',
+    },
+  },
 };

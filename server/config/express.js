@@ -55,7 +55,7 @@ export default function (app) {
   app.use((req, res, next) => {
     const list = ['dev', 'test', 'pre', 'prd'];
     const value = list.indexOf(__ENV__);
-    if (!req.cookies._e || req.cookies._e !== value) {
+    if (!req.cookies._e || Number(req.cookies._e) !== value) {
       res.cookie('_e', value);
     }
     next();

@@ -57,8 +57,8 @@ config.module.loaders.push({
 config.plugins.push(
   new webpack.DefinePlugin({
     __DEVELOPMENT__: true,
-    __DEVTOOLS__: process.env.DEVTOOLS === 'true',
-    __DEBUG__: process.env.DEBUG === 'true'
+    __DEVTOOLS__: process.env.DEVTOOLS !== 'false',
+    __DEBUG__: process.env.DEBUG !== 'false'
   })
 );
 config.plugins.push(new webpack.HotModuleReplacementPlugin());

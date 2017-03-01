@@ -12,7 +12,7 @@ import { decrement } from 'modules/reduxPlus/redux/actions';
 import { pageRender, serverRouteRender } from '../render';
 
 export default function (app) {
-  app.get('(/redux|/redux/*)', (req, ...args) => {
+  app.get(['/redux', '/redux/*'], (req, ...args) => {
     const initData = {
       todos: [{
         text: '1',
@@ -40,7 +40,7 @@ export default function (app) {
       }, req, ...args);
     }
   });
-  app.get('(/reduxPlus|/reduxPlus/*)', (req, ...args) => {
+  app.get(['/reduxPlus', '/reduxPlus/*'], (req, ...args) => {
     const initData = {
       todos: [{
         text: '1',

@@ -117,13 +117,13 @@ export const fetchAPI = (options, middlewares) => {
     opts.body = data;
   }
   if (!isFormData) {
-    // 耦合的接口配置默认请求头，非必需
-    // if (!url) {
-    //   opts.headers = {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   };
-    // }
+    // 耦合内部的接口配置默认请求头
+    if (!url && headers !== false) {
+      opts.headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      };
+    }
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
     }

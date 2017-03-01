@@ -75,7 +75,7 @@ function _getURL({ url, server, path = '/' }) {
  * json规范接口调用，如非json规范，请使用isomorphic-fetch
  * 默认允许跨域请求和cookies跨域携带
  */
-export const fetchAPI = (options, middlewares) => {
+export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) => {
   const {
     url,
     server,
@@ -132,11 +132,11 @@ export const fetchAPI = (options, middlewares) => {
     }
   }
 
-  __DEBUG__ && console.debug(_url, opts);
+  __DEBUG__ && console.debug('fetchAPI', _url, opts);
 
   let _promise = fetch(_url, opts)
-    .then(_checkStatus)
-    .then(_parseJSON);
+    .then(checkStatus || _checkStatus)
+    .then(parseJSON || _parseJSON);
 
   // 添加中间件
   if (middlewares instanceof Array && middlewares.length) {
@@ -149,12 +149,16 @@ export const fetchAPI = (options, middlewares) => {
 
   _promise = _promise.then(
     (json) => {
+      __DEBUG__ && console.debug('fetchAPI _promise success');
       typeof success === 'function' && success(json);
       return json;
     },
-    (e) => {
-      typeof error === 'function' && error(e);
-      throw e;
+    (reason) => {
+      __DEBUG__ && console.debug('fetchAPI _promise fail', reason);
+      return new Promise((resolve, reject) => {
+        typeof error === 'function' && error(reason);
+        reject(reason);
+      });
     },
   );
 
@@ -166,11 +170,9 @@ export const getURL = (...args) => {
   return _url;
 };
 
-export const createFetchAPI = (...middlewares) => (opts) => {
-  // support (fn1, fn2, fn3) and ([fn1, fn2, fn3])
-  let fns = [];
-  for (let i = 0; i < middlewares.length; i += 1) {
-    fns = fns.concat(middlewares[i]);
+export const createFetchAPI = ({ checkStatus, parseJSON, middlewares }) => (opts) => {
+  if (!(middlewares instanceof Array)) {
+    middlewares = [middlewares];
   }
-  return fetchAPI(opts, fns);
+  return fetchAPI(opts, { checkStatus, parseJSON, middlewares });
 };

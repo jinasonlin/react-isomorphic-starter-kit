@@ -1,5 +1,6 @@
 import promise from 'es6-promise';
 import fetch from 'isomorphic-fetch';
+import qs from 'qs';
 import { API } from 'config';
 
 promise.polyfill();
@@ -99,11 +100,12 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
   }
 
   // 配置请求地址
-  const { _url, _cors } = _getURL({ url, server, path });
-  if (!_url) {
+  const URL = _getURL({ url, server, path });
+  let _url = URL._url;
+  if (!URL._url) {
     throw new Error('Missing request address');
   }
-  if (_cors && !mode) {
+  if (URL._cors && !mode) {
     opts.mode = 'cors';
   }
 
@@ -113,7 +115,7 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
   }
 
   // 配置请求头和请求体
-  if (~['POST', 'PUT'].indexOf(method)) {
+  if (~['POST', 'PUT'].indexOf(method) && data) {
     opts.body = data;
   }
   if (!isFormData) {
@@ -127,7 +129,10 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
     }
-    if (~['POST', 'PUT'].indexOf(method)) {
+    if (method === 'GET' && data) {
+      const querystring = qs.stringify(data, { arrayFormat: 'repeat' });
+      _url = `${URL._url}&${querystring}`.replace(/[&?]{1,2}/, '?');
+    } else if (~['POST', 'PUT'].indexOf(method) && data) {
       opts.body = JSON.stringify(opts.body);
     }
   }

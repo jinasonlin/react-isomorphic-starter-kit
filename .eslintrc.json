@@ -33,7 +33,7 @@
     "no-unused-vars": "warn",
     "global-require": "off",
     "max-len": "warn",
-    "no-console": ["warn", { allow: ["info", warn", "error"] }],
+    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
     "no-bitwise": ["error", { "allow": ["~"] }],
     "no-underscore-dangle": "off",
     "arrow-body-style": "off",
@@ -45,7 +45,7 @@
     "import/prefer-default-export": "warn",
     "react/prop-types": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
-    "react/jsx-closing-bracket-location": ["error", { selfClosing: "props-aligned", nonEmpty: "after-props" }],
+    "react/jsx-closing-bracket-location": ["error", { "selfClosing": "props-aligned", "nonEmpty": "after-props" }],
     "react/no-array-index-key": "warn",
     "jsx-a11y/no-static-element-interactions": "off"
   }

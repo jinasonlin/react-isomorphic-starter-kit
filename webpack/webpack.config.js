@@ -12,9 +12,6 @@ var rootPath = path.resolve(__dirname, '..');
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
-var babelLoaderQuery = require('../babel.json');
-delete babelLoaderQuery.env;
-
 // 测试和预发开启source-map
 if (!!~['test', 'pre'].indexOf(process.env.DEPLOY_ENV)) {
   config.devtool = 'source-map';
@@ -22,20 +19,49 @@ if (!!~['test', 'pre'].indexOf(process.env.DEPLOY_ENV)) {
 }
 config.output.filename = 'js/[name].[chunkhash:8].js';
 // config.output.publicPath = 'http://static.zhongan.com/website/health/mobile/assets/';
-config.module.loaders.push({ 
+config.module.rules.push({ 
   test: /\.scss$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader?importLoaders=1!postcss-loader!sass-loader')
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: [
+      {
+        loader: 'css-loader',
+        options: {
+          importLoaders: 1
+        }
+      },
+      'postcss-loader',
+      'sass-loader'
+    ]
+  })
 });
-config.module.loaders.push({
+config.plugins.push(
+  new webpack.LoaderOptionsPlugin({
+    options: {
+      postcss: [
+        require('autoprefixer')
+      ]
+    }
+  })
+);
+config.module.rules.push({
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
-  loader: 'babel',
-  query: babelLoaderQuery
+  use: [
+    {
+      loader: 'babel-loader',
+      options: {
+        "presets": ["react", ["es2015", { "modules": false }], "stage-0"],
+        "plugins": [
+          "transform-runtime",
+          "syntax-dynamic-import"
+        ]
+      }
+    }
+  ]
 });
 config.plugins.push(
   new CleanPlugin([rootPath + '/assets'], { root: rootPath }),
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin({
     compress: {
       warnings: false
@@ -45,7 +71,12 @@ config.plugins.push(
     }
   })
 );
-config.plugins.push(new ExtractTextPlugin('css/[name].[contenthash:8].css', { allChunks: true }));
+config.plugins.push(
+  new ExtractTextPlugin({
+    filename: 'css/[name].[contenthash:8].css',
+    allChunks: true 
+  })
+);
 config.plugins.push(
   new webpack.DefinePlugin({
     'process.env': {

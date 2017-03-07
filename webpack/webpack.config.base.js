@@ -34,27 +34,42 @@ var config = {
     publicPath: '/'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(woff|woff2|ttf|eot|svg)$/,
-        loader: 'file-loader?name=fonts/[name].[hash:8].[ext]'
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fonts/[name].[hash:8].[ext]'
+            }
+          }
+        ]
       },
       {
         test: /\.(jpeg|jpg|png|gif|svg)$/,
-        loader: 'url-loader?limit=8192&name=images/[name].[hash:8].[ext]'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: 'images/[name].[hash:8].[ext]'
+            }
+          }
+        ]
       },
       {
         test: /\.html$/,
-        loader: 'html-loader'
+        use: ['html-loader']
       }
     ]
   },
   resolve: {
-    modulesDirectories: [
-      'client',
+    modules: [
+      path.resolve(rootPath, 'client'),
       'node_modules',
     ],
-    extensions: ['', '.js', '.jsx', '.scss']
+    extensions: ['.js', '.jsx', '.scss']
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendors' }),
@@ -66,12 +81,7 @@ var config = {
       __CLIENT__: true,
       __SERVER__: false,
     })
-  ],
-  postcss: function() {
-    return [
-      require('autoprefixer')
-    ];
-  }
+  ]
 };
 
 var entry = process.env.ENTRY ? process.env.ENTRY.split(';') : [];

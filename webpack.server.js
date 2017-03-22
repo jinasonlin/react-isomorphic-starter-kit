@@ -59,7 +59,6 @@ app.get('*', function (req, res, next) {
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-touch-fullscreen" content="yes">
         <title>众安在线${rootPath}</title>
-        <script>(window.__setFontSize__=function(){document.documentElement.style.fontSize = Math.min(640, Math.max(document.documentElement.clientWidth, 320)) / 320 * 14 + 'px'})()</script>
       </head>
       <body>
         <div id="app"></div>

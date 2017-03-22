@@ -36,7 +36,7 @@
     "no-unused-vars": "warn",
     "global-require": "off",
     "max-len": ["warn", 200],
-    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
+    "no-console": ["warn", { "allow": ["debug", "info", "warn", "error"] }],
     "no-bitwise": ["error", { "allow": ["~"] }],
     "no-underscore-dangle": "off",
     "arrow-body-style": "off",

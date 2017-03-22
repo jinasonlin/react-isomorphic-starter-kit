@@ -1,11 +1,32 @@
 import promise from 'es6-promise';
 import fetch from 'isomorphic-fetch';
 import qs from 'qs';
-import { API } from 'config';
 
 promise.polyfill();
 
-const servies = new Set(Object.keys(API));
+let debug = false;
+if (typeof __DEBUG__ !== 'undefined') {
+  debug = __DEBUG__;
+}
+
+/**
+ * API格式
+ * {
+ *   serviceName: {
+ *     host: 'your.server.host.com or /your/server/path'
+ *   }
+ * }
+ */
+let API = {};
+let services = [];
+
+function _setServices(api) {
+  const keys = Object.keys(api);
+  if (keys.length) {
+    services = keys;
+    API = api;
+  }
+}
 
 function _checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -13,14 +34,14 @@ function _checkStatus(response) {
   }
   const error = new Error(response.statusText);
   error.response = response;
-  throw error;
+  return Promise.reject(error);
 }
 
-function _parseJSON(response) {
+function _parseResponse(response) {
   return response.json();
 }
 
-// TODO(优化路径正则匹配)
+// TODO 优化路径正则匹配
 function _getURL({ url, server, path = '/' }) {
   const PATH = /^\/[0-9a-zA-Z]+/;
   const URL = /^(http:\/\/|https:\/\/|\/\/)/;
@@ -48,7 +69,7 @@ function _getURL({ url, server, path = '/' }) {
 
   let _url;
   let _cors = false;
-  const _host = servies.has(server) ? API[server].host : '';
+  const _host = ~services.indexOf(server) ? API[server].host : '';
   if (server && _host) {
     // _host为路径时，不补全
     // _host为地址时，_cors = true
@@ -71,12 +92,20 @@ function _getURL({ url, server, path = '/' }) {
   };
 }
 
+export { _setServices as setServices };
+
+export const getURL = (...args) => {
+  const { _url } = _getURL(...args);
+  return _url;
+};
+
 /**
- * fetch json accept api
- * json规范接口调用，如非json规范，请使用isomorphic-fetch
+ * fetchAPI
+ * 默认json规范接口调用。如非json规范，可以自行定义中间件，或使用isomorphic-fetch
  * 默认允许跨域请求和cookies跨域携带
+ * TODO 增加querystring参数配置
  */
-export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) => {
+const fetchAPI = (options, { checkStatus, parseResponse, middlewares } = {}) => {
   const {
     url,
     server,
@@ -93,7 +122,7 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
   } = options;
 
   const opts = {
-    method,
+    method: method.toUpperCase(),
   };
   if (mode) {
     opts.mode = mode;
@@ -115,7 +144,7 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
   }
 
   // 配置请求头和请求体
-  if (~['POST', 'PUT'].indexOf(method) && data) {
+  if (~['POST', 'PUT'].indexOf(opts.method) && data) {
     opts.body = data;
   }
   if (!isFormData) {
@@ -129,19 +158,19 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
     if (headers) {
       opts.headers = Object.assign({}, opts.headers, headers);
     }
-    if (method === 'GET' && data) {
+    if (opts.method === 'GET' && data) {
       const querystring = qs.stringify(data, { arrayFormat: 'repeat' });
       _url = `${URL._url}&${querystring}`.replace(/[&?]{1,2}/, '?');
-    } else if (~['POST', 'PUT'].indexOf(method) && data) {
+    } else if (~['POST', 'PUT'].indexOf(opts.method) && data) {
       opts.body = JSON.stringify(opts.body);
     }
   }
 
-  __DEBUG__ && console.debug('fetchAPI', _url, opts);
+  debug && console.debug('fetchAPI', _url, opts);
 
   let _promise = fetch(_url, opts)
     .then(checkStatus || _checkStatus)
-    .then(parseJSON || _parseJSON);
+    .then(parseResponse || _parseResponse);
 
   // 添加中间件
   if (middlewares instanceof Array && middlewares.length) {
@@ -154,30 +183,48 @@ export const fetchAPI = (options, { checkStatus, parseJSON, middlewares } = {}) 
 
   _promise = _promise.then(
     (json) => {
-      __DEBUG__ && console.debug('fetchAPI _promise success');
+      debug && console.debug('fetchAPI _promise success');
       typeof success === 'function' && success(json);
       return json;
     },
     (reason) => {
-      __DEBUG__ && console.debug('fetchAPI _promise fail', reason);
-      return new Promise((resolve, reject) => {
-        typeof error === 'function' && error(reason);
-        reject(reason);
-      });
+      debug && console.debug('fetchAPI _promise fail', reason);
+      typeof error === 'function' && error(reason);
+      return Promise.reject(reason);
     },
   );
 
   return _promise;
 };
 
-export const getURL = (...args) => {
-  const { _url } = _getURL(...args);
-  return _url;
-};
+['get', 'post', 'put'].forEach((method) => {
+  fetchAPI[method] = (url, data, opts) => {
+    if (typeof url === 'string') {
+      return fetchAPI({
+        method: method.toUpperCase(),
+        url,
+        data,
+        ...opts,
+      });
+    }
+    if (typeof url === 'object') {
+      return fetchAPI({
+        method: method.toUpperCase(),
+        ...url,
+      });
+    }
+    throw new Error('params error; need (url, data, opts) or (setting)');
+  };
+});
 
-export const createFetchAPI = ({ checkStatus, parseJSON, middlewares }) => (opts) => {
+export { fetchAPI };
+
+export const createFetchAPI = ({ options = {}, checkStatus, parseJSON, middlewares } = {}) => (opts) => {
   if (!(middlewares instanceof Array)) {
     middlewares = [middlewares];
   }
-  return fetchAPI(opts, { checkStatus, parseJSON, middlewares });
+  return fetchAPI(Object.assign({}, options, opts), { checkStatus, parseJSON, middlewares });
 };
+
+// default fetch
+export { fetch };

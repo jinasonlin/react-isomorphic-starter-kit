@@ -21,18 +21,21 @@
   },
   "rulesLinks": [
     "https://github.com/eslint/eslint/tree/master/docs/rules",
-    "https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules",
-    "https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules"
+    "https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules",
+    "https://github.com/evcohen/eslint-plugin-jsx-a11y/tree/master/docs/rules",
+    "https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules"
   ],
   "rules": {
+    "linebreak-style": "off",
     "func-names": ["error", "as-needed"],
     "prefer-arrow-callback": "warn",
+    "no-multi-assign": "warn",
     "no-param-reassign": "off",
     "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
     "consistent-return": "off",
     "no-unused-vars": "warn",
     "global-require": "off",
-    "max-len": "warn",
+    "max-len": ["warn", 200],
     "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
     "no-bitwise": ["error", { "allow": ["~"] }],
     "no-underscore-dangle": "off",

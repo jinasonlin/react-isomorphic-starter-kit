@@ -10,7 +10,7 @@ function getDevTools() {
     devTools = createDevTools(
       <DockMonitor defaultIsVisible={false} toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q">
         <LogMonitor theme="tomorrow" preserveScrollTop={false} />
-      </DockMonitor>,
+      </DockMonitor>
     );
   }
   return devTools;

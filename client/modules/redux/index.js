@@ -16,7 +16,7 @@ render(
   <Provider store={store}>
     <Router routes={routes} history={browserHistory} />
   </Provider>,
-  rootElement,
+  rootElement
 );
 
 if (DevTools) {
@@ -25,6 +25,6 @@ if (DevTools) {
     <Provider store={store}>
       <DevTools />
     </Provider>,
-    devtools,
+    devtools
   );
 }

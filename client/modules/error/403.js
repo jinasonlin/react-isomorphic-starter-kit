@@ -4,5 +4,5 @@ import UnauthorizedView from './components/unauthorized';
 
 ReactDOM.render(
   <UnauthorizedView />,
-  document.getElementById('app'),
+  document.getElementById('app')
 );

@@ -4,5 +4,5 @@ import ErrorView from './components/error';
 
 ReactDOM.render(
   <ErrorView />,
-  document.getElementById('app'),
+  document.getElementById('app')
 );

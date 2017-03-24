@@ -18,7 +18,7 @@ render(
   <Provider store={store}>
     <Router routes={routes} history={history} />
   </Provider>,
-  rootElement,
+  rootElement
 );
 
 /**
@@ -32,6 +32,6 @@ if (DevTools && DevToolsInner) {
     <Provider store={store}>
       <DevTools />
     </Provider>,
-    devtools,
+    devtools
   );
 }

@@ -1,5 +1,4 @@
-
-export const loadJS = (src, callback) => {
+export default (src, callback) => {
   const script = document.createElement('script');
   const head = document.getElementsByTagName('head')[0];
   let loaded;

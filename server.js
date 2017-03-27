@@ -19,8 +19,8 @@ if (global.__ENV__ === 'prd') {
   process.env.NODE_ENV = 'production';
 }
 
-var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
+const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('./webpack/webpack-isomorphic-tools'))
-  .server(__dirname, function() {
+  .server(__dirname, () => {
     require('./server/server');
   });

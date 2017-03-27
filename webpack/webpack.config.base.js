@@ -1,34 +1,34 @@
 // Webpack base config
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var rootPath = path.resolve(__dirname, '..');
+const rootPath = path.resolve(__dirname, '..');
 
-var config = {
+const config = {
   context: rootPath,
   entry: {
-    'home': [
-      './client/modules/home/index.js'
+    home: [
+      './client/modules/home/index.js',
     ],
-    'redux': [
-      './client/modules/redux/index.js'
+    redux: [
+      './client/modules/redux/index.js',
     ],
-    'error_403': [
-      './client/modules/error/403.js'
+    error_403: [
+      './client/modules/error/403.js',
     ],
-    'error_404': [
-      './client/modules/error/404.js'
+    error_404: [
+      './client/modules/error/404.js',
     ],
-    'error_500': [
-      './client/modules/error/500.js'
-    ]
+    error_500: [
+      './client/modules/error/500.js',
+    ],
   },
   output: {
-    path: rootPath + '/assets',
+    path: `${rootPath}/assets`,
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].[chunkhash:8].js',
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -38,10 +38,10 @@ var config = {
           {
             loader: 'file-loader',
             options: {
-              name: 'fonts/[name].[hash:8].[ext]'
-            }
-          }
-        ]
+              name: 'fonts/[name].[hash:8].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.(jpeg|jpg|png|gif|svg)$/,
@@ -50,23 +50,23 @@ var config = {
             loader: 'url-loader',
             options: {
               limit: 8192,
-              name: 'images/[name].[hash:8].[ext]'
-            }
-          }
-        ]
+              name: 'images/[name].[hash:8].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.html$/,
-        use: ['html-loader']
-      }
-    ]
+        use: ['html-loader'],
+      },
+    ],
   },
   resolve: {
     modules: [
       path.resolve(rootPath, 'client'),
       'node_modules',
     ],
-    extensions: ['.js', '.jsx', '.scss']
+    extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendors' }),
@@ -77,39 +77,39 @@ var config = {
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
-    })
-  ]
+    }),
+  ],
 };
 
-var entry = process.env.ENTRY ? process.env.ENTRY.split(';') : [];
-var entryFilter = process.env.ENTRYFILTER ? process.env.ENTRYFILTER.split(';') : [];
+const entry = process.env.ENTRY ? process.env.ENTRY.split(';') : [];
+const entryFilter = process.env.ENTRYFILTER ? process.env.ENTRYFILTER.split(';') : [];
 
 if (entry.length) {
-  var _entry = {};
-  for (var entryKey in config.entry) {
-    if (~entry.indexOf(entryKey)) {
-      _entry[entryKey] = config.entry[entryKey];
+  const _entry = {};
+  Object.keys(config.entry).forEach((key) => {
+    if (~entry.indexOf(key)) {
+      _entry[key] = config.entry[key];
     }
-  }
+  });
   config.entry = _entry;
 }
 
 if (entryFilter.length) {
-  var _entry = {};
-  for (var entryFilterKey in config.entry) {
-    if (!~entryFilter.indexOf(entryFilterKey)) {
-      _entry[entryFilterKey] = config.entry[entryFilterKey];
+  const _entry = {};
+  Object.keys(config.entry).forEach((key) => {
+    if (!~entryFilter.indexOf(key)) {
+      _entry[key] = config.entry[key];
     }
-  }
+  });
   config.entry = _entry;
 }
 
-for (var key in config.entry) {
+Object.keys(config.entry).forEach((key) => {
   config.plugins.push(new HtmlWebpackPlugin({
-    filename: 'views/' + key + '.html',
+    filename: `views/${key}.html`,
     template: './client/views/template.html',
-    chunks: ['vendors', key]
+    chunks: ['vendors', key],
   }));
-}
+});
 
 module.exports = config;

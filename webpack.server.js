@@ -1,18 +1,17 @@
 require('dotenv').config({ silent: true });
 
-var path = require('path');
-var Express = require('express');
-var webpack = require('webpack');
+const Express = require('express');
+const webpack = require('webpack');
 
-var webpackConfig = require('./webpack/webpack.config.dev');
-var compiler = webpack(webpackConfig);
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackConfig = require('./webpack/webpack.config.dev');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 
-var host = process.env.HOST || 'localhost';
-var port = process.env.PORT ? Number(process.env.PORT) + 1 : 8081;
+const compiler = webpack(webpackConfig);
+// const host = process.env.HOST || 'localhost';
+const port = process.env.PORT ? Number(process.env.PORT) + 1 : 8081;
 
-var serverOptions = {
+const serverOptions = {
   // contentBase: 'http://' + host + ':' + port,
   // quiet: true,
   noInfo: true,
@@ -24,18 +23,18 @@ var serverOptions = {
   // stats: { colors: true }
 };
 
-var app = new Express();
+const app = new Express();
 
 app.use(webpackDevMiddleware(compiler, serverOptions));
 app.use(webpackHotMiddleware(compiler));
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.redirect('/home');
 });
 
-app.get('*', function (req, res, next) {
-  var paths = req.path.split('/');
-  var rootPath = paths[1];
+app.get('*', (req, res, next) => {
+  const paths = req.path.split('/');
+  let rootPath = paths[1];
   if (rootPath === 'favicon.ico') {
     return next();
   }
@@ -49,7 +48,7 @@ app.get('*', function (req, res, next) {
   }
 
   // 页面模版
-  var view = `
+  const view = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -71,7 +70,7 @@ app.get('*', function (req, res, next) {
   res.send(view);
 });
 
-app.listen(port, function onAppListening(err) {
+app.listen(port, (err) => {
   if (err) {
     console.error(err);
   } else {

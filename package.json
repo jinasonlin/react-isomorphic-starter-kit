@@ -9,8 +9,11 @@
     "start": "NODE_PATH=./client node server.js",
     "start:dev": "echo 'best way was open ALLOW_ISOMORPHIC_PROXY \n' & NODE_PATH=./client nodemon server.js",
     "build": "webpack --config webpack/webpack.config.js",
-    "lint": "eslint --ext .jsx --ext .js server client config; exit 0",
+    "lint": "eslint --ext .jsx --ext .js server client config webpack; exit 0",
     "dev": "node webpack.server.js"
+  },
+  "engines": {
+    "node": ">=6"
   },
   "dependencies": {
     "babel-polyfill": "^6.20.0",

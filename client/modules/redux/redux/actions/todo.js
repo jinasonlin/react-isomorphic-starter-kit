@@ -3,10 +3,8 @@
  */
 
 export const ADD_TODO = 'ADD_TODO';
-export const COMPLETE_TODO = 'COMPLETE_TODO';
+export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
-export const INCREMENT = 'INCREMENT';
-export const DECREMENT = 'DECREMENT';
 
 /*
  * 其它的常量
@@ -21,23 +19,26 @@ export const VisibilityFilters = {
 /*
  * action 创建函数
  */
+let nextTodoId = 0;
 
 export function addTodo(text) {
-  return { type: ADD_TODO, text };
+  const id = nextTodoId;
+  nextTodoId += 1;
+
+  return {
+    type: ADD_TODO,
+    id,
+    text,
+  };
 }
 
-export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index };
+export function toggleTodo(id) {
+  return {
+    type: TOGGLE_TODO,
+    id,
+  };
 }
 
 export function setVisibilityFilter(filter) {
   return { type: SET_VISIBILITY_FILTER, filter };
-}
-
-export function increment() {
-  return { type: INCREMENT };
-}
-
-export function decrement() {
-  return { type: DECREMENT };
 }

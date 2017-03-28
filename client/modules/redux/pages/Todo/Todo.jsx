@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../redux/actions';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
+import { Button } from 'dragon-ui';
+import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from '../../redux/actions';
+import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
 
 class Todo extends Component {
   render() {
     const { visibleTodos, visibilityFilter } = this.props;
     const { onAddClick, onTodoClick, onFilterChange } = this.props;
     return (
-      <div>
+      <div className="container-todo">
         <AddTodo
           onAddClick={text =>
             onAddClick(text)
@@ -19,8 +20,8 @@ class Todo extends Component {
           />
         <TodoList
           todos={visibleTodos}
-          onTodoClick={index =>
-            onTodoClick(index)
+          onTodoClick={id =>
+            onTodoClick(id)
           }
           />
         <Footer
@@ -29,9 +30,10 @@ class Todo extends Component {
             onFilterChange(nextFilter)
           }
           />
-        <Link to="/reduxPlus/counter">Counter</Link>
-        <br />
-        <Link to="/reduxPlus/distance">Distance</Link>
+        <div className="link">
+          <Link to="/redux/counter"><Button theme="success">Counter</Button></Link>
+          <Link to="/redux/distance"><Button theme="warning">Distance</Button></Link>
+        </div>
       </div>
     );
   }
@@ -73,7 +75,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(addTodo(text));
     },
     onTodoClick(id) {
-      dispatch(completeTodo(id));
+      dispatch(toggleTodo(id));
     },
     onFilterChange(nextFilter) {
       dispatch(setVisibilityFilter(nextFilter));

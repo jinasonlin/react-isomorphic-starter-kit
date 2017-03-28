@@ -17,11 +17,11 @@ export {
 // export todos
 export {
   ADD_TODO,
-  COMPLETE_TODO,
+  TOGGLE_TODO,
   SET_VISIBILITY_FILTER,
   VisibilityFilters,
   addTodo,
-  completeTodo,
+  toggleTodo,
   setVisibilityFilter,
 } from './todo';
 

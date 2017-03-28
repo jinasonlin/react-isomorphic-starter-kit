@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Form, Button } from 'dragon-ui';
-import { increment, decrement } from '../redux/actions';
-import './index.scss';
+import { increment, decrement } from '../../redux/actions';
+import './Counter.scss';
 
 class Counter extends Component {
   incrementIfOdd() {
@@ -13,7 +13,7 @@ class Counter extends Component {
   }
 
   incrementAsync() {
-    setTimeout(this.props.onIncrement, 1000);
+    setTimeout(this.props.onIncrement, 800);
   }
 
   render() {
@@ -23,29 +23,29 @@ class Counter extends Component {
         <Form.Item
           label="Clicked"
           labelCol="col-sm-2"
-          controlCol="col-sm-10">
+          controlCol="col-sm-8">
           {value} times
         </Form.Item>
         <Form.Item
           label="加减"
           labelCol="col-sm-2"
-          controlCol="col-sm-10">
+          controlCol="col-sm-8">
           <Button theme="success" onClick={onIncrement}>+</Button>
           <Button theme="success" onClick={onDecrement}>-</Button>
         </Form.Item>
         <Form.Item
           label="附加"
           labelCol="col-sm-2"
-          controlCol="col-sm-10">
+          controlCol="col-sm-8">
           <Button theme="success" onClick={() => this.incrementIfOdd()}>Increment if odd</Button>
           <Button theme="success" onClick={() => this.incrementAsync()}>Increment async</Button>
         </Form.Item>
         <Form.Item
           label
           labelCol="col-sm-2"
-          controlCol="col-sm-10">
-          <Link to="/reduxPlus"><Button theme="success">TODO</Button></Link>
-          <Link to="/reduxPlus/distance"><Button theme="warning">Distance</Button></Link>
+          controlCol="col-sm-8">
+          <Link to="/redux"><Button theme="success">TODO</Button></Link>
+          <Link to="/redux/distance"><Button theme="warning">Distance</Button></Link>
         </Form.Item>
       </Form>
     );

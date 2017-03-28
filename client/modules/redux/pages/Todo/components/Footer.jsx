@@ -8,6 +8,7 @@ export default class Footer extends Component {
 
     return (
       <a
+        style={{ color: 'blue' }}
         onClick={(e) => {
           e.preventDefault();
           this.props.onFilterChange(filter);

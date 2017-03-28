@@ -1,13 +1,17 @@
 const rootRoute = {
   path: '/redux',
-  component: require('../../components/App'),
+  component: require('./components/App'),
   indexRoute: {
-    component: require('./containers/App'),
+    component: require('./pages/Todo'),
   },
   childRoutes: [
     {
       path: 'counter',
-      component: require('./containers/Counter'),
+      component: require('./pages/Counter'),
+    },
+    {
+      path: 'distance',
+      component: require('./pages/Distance'),
     },
   ],
 };

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import * as _ from 'lodash';
 import { fetchAPI } from 'utils/fetch';
-import { API } from 'config';
+import config from 'config';
 
 import {
   Button,
@@ -16,7 +16,7 @@ import {
 class Page extends Component {
   constructor(props) {
     super(props);
-    this.servers = _.keys(API);
+    this.servers = _.keys(config.API);
     this.state = {
       // view config
       inner: true,

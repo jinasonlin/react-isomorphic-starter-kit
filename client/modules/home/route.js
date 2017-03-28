@@ -1,34 +1,46 @@
+import App from '../../components/App';
+import Dashboard from './pages/Dashboard';
+import Server from './pages/ServerRender';
+import Tool from './pages/Tool';
+
 const rootRoute = {
   path: '/home',
-  component: require('../../components/App'),
+  component: App,
   indexRoute: {
-    component: require('./pages/Dashboard'),
+    component: Dashboard,
   },
   childRoutes: [
     {
       path: 'client-render',
       getComponent(location, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('./pages/ClientRender'));
-        });
+        import('./pages/ClientRender')
+          .then(module => {
+            return cb(null, module.default)
+          })
+          .catch(e => {
+            return cb(e);
+          });
       },
     },
     {
       path: 'server-render',
-      component: require('./pages/ServerRender'),
+      component: Server,
     },
     {
       path: 'tool',
-      component: require('./pages/Tool'),
+      component: Tool,
     },
     {
       path: '*',
       getComponent(location, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('./pages/NotFoundPage'));
-        });
+        import('./pages/NotFoundPage')
+          .then(module => {
+            return cb(null, module.default)
+          })
+          .catch(e => {
+            return cb(e);
+          });
       },
-      // onEnter: (nextState, replace) => location.replace('/404')
     },
   ],
 };

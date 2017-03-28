@@ -1,6 +1,6 @@
-import { API } from 'config';
+import config from 'config';
 import { setServices } from 'za-fetch-api';
 
-setServices(API);
+setServices(config.API);
 
 export { fetchAPI, getURL } from 'za-fetch-api';

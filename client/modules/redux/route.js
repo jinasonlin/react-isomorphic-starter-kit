@@ -1,17 +1,22 @@
+import App from './components/App';
+import Todo from './pages/Todo';
+import Counter from './pages/Counter';
+import Distance from './pages/Distance';
+
 const rootRoute = {
   path: '/redux',
-  component: require('./components/App'),
+  component: App,
   indexRoute: {
-    component: require('./pages/Todo'),
+    component: Todo,
   },
   childRoutes: [
     {
       path: 'counter',
-      component: require('./pages/Counter'),
+      component: Counter,
     },
     {
       path: 'distance',
-      component: require('./pages/Distance'),
+      component: Distance,
     },
   ],
 };

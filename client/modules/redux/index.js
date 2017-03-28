@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { browserHistory, Router } from 'react-router';
+import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { AppContainer } from 'react-hot-loader';
 import configureStore from './redux/store';
-import routes from './route';
+import Root from './root';
 
 let initState;
 if (window.__data) {
@@ -14,9 +14,18 @@ const store = configureStore(browserHistory, initState);
 const history = syncHistoryWithStore(browserHistory, store);
 
 const rootElement = document.getElementById('app');
-render(
-  <Provider store={store}>
-    <Router routes={routes} history={history} />
-  </Provider>,
-  rootElement
-);
+
+const renderApp = () => {
+  render(
+    <AppContainer>
+      <Root {...{ store, history }} />
+    </AppContainer>,
+    rootElement
+  );
+};
+
+renderApp();
+
+if (module.hot) {
+  module.hot.accept('./root', () => renderApp());
+}

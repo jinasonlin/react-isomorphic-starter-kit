@@ -26,6 +26,7 @@ config.devtool = 'eval-source-map';
 // 为entry增加热加载
 Object.keys(config.entry).forEach((key) => {
   config.entry[key].unshift(hotClient);
+  config.entry[key].unshift('react-hot-loader/patch');
 });
 config.output.publicPath = publicPath;
 config.module.rules.push({
@@ -55,10 +56,11 @@ config.module.rules.push({
   test: /\.(js|jsx)$/,
   exclude: /(node_modules)/,
   use: [
+    'react-hot-loader/webpack',
     {
       loader: 'babel-loader',
       options: {
-        presets: ['react', ['es2015', { modules: false }], 'stage-0', 'react-hmre'],
+        presets: ['react', ['es2015', { modules: false }], 'stage-0'],
         plugins: [
           'transform-runtime',
           'syntax-dynamic-import',

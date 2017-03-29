@@ -15,17 +15,17 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 const rootElement = document.getElementById('app');
 
-const renderApp = () => {
+const renderApp = (Component) => {
   render(
     <AppContainer>
-      <Root {...{ store, history }} />
+      <Component {...{ store, history }} />
     </AppContainer>,
     rootElement
   );
 };
 
-renderApp();
+renderApp(Root);
 
 if (module.hot) {
-  module.hot.accept('./root', () => renderApp());
+  module.hot.accept('./root', () => renderApp(Root));
 }

@@ -1,7 +1,7 @@
 import { createMemoryHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 // redux plus
-import { configureStore } from 'modules/redux/redux/store';
+import configureStore from 'modules/redux/redux/store';
 import routes from 'modules/redux/route';
 import { decrement } from 'modules/redux/redux/actions';
 import { pageRender, serverRouteRender } from '../render';

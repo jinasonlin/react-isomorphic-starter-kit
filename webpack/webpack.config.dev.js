@@ -25,8 +25,7 @@ if (process.env.ALLOW_ISOMORPHIC_PROXY === 'true') {
 config.devtool = 'eval-source-map';
 // 为entry增加热加载
 Object.keys(config.entry).forEach((key) => {
-  config.entry[key].unshift(hotClient);
-  config.entry[key].unshift('react-hot-loader/patch');
+  config.entry[key].unshift('react-hot-loader/patch', hotClient);
 });
 config.output.publicPath = publicPath;
 config.module.rules.push({
@@ -56,12 +55,12 @@ config.module.rules.push({
   test: /\.(js|jsx)$/,
   exclude: /(node_modules)/,
   use: [
-    'react-hot-loader/webpack',
     {
       loader: 'babel-loader',
       options: {
         presets: ['react', ['es2015', { modules: false }], 'stage-0'],
         plugins: [
+          'react-hot-loader/babel',
           'transform-runtime',
           'syntax-dynamic-import',
         ],
@@ -76,6 +75,6 @@ config.plugins.push(
     __DEBUG__: process.env.DEBUG !== 'false',
   })
 );
-config.plugins.push(new webpack.HotModuleReplacementPlugin());
+config.plugins.push(new webpack.HotModuleReplacementPlugin(), new webpack.NamedModulesPlugin(), new webpack.NoEmitOnErrorsPlugin());
 
 module.exports = config;

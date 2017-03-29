@@ -1,9 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { browserHistory, Router } from 'react-router';
-import * as routes from './route';
+import { render } from 'react-dom';
+import { browserHistory } from 'react-router';
+import { AppContainer } from 'react-hot-loader';
+import Root from './root';
 
-ReactDOM.render(
-  <Router routes={routes} history={browserHistory} />,
-  document.getElementById('app')
-);
+const rootElement = document.getElementById('app');
+
+const renderApp = (Component) => {
+  render(
+    <AppContainer>
+      <Component history={browserHistory} />
+    </AppContainer>,
+    rootElement
+  );
+};
+
+renderApp(Root);
+
+if (module.hot) {
+  module.hot.accept('./root', () => renderApp(Root));
+}
